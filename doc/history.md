@@ -9,11 +9,9 @@ Headers:
 Request Body:
 ```json
 {
-    "penyakit": "...",
-    "penjelasan_penyakit": "....",
+    "diseaseId": 1,
     "face_img": "*.jpg",
-    "solution_acne": "...",
-    "product_solution": "..."
+    "productId": 1
 }
 ```
 
@@ -21,11 +19,9 @@ Response Body (Success):
 ```json
 {
     "data": {
-        "penyakit": "...",
-        "penjelasan_penyakit": "....",
+        "diseaseId": 1,
         "face_img": "*.jpg",
-        "solution_acne": "...",
-        "product_solution": "..."
+        "productId": 1
     }
 }
 ```
@@ -39,13 +35,24 @@ Headers:
 Response Body (Success):
 ```json
 {
-    "data": {
-        "penyakit": "...",
-        "penjelasan_penyakit": "....",
-        "face_img": "*.jpg",
-        "solution_acne": "...",
-        "product_solution": "..."
-    }
+    "data": [
+        {
+            "historyId": 1,
+            "disease": disease.name,
+            "description_disease": disease.description,
+            "face_img": "*.jpg",
+            "solution_acne": disease.solution,
+            "product_solution": product.name
+        },
+        {
+            "historyId": 2,
+            "disease": disease.name,
+            "description_disease": disease.description,
+            "face_img": "*.jpg",
+            "solution_acne": disease.solution,
+            "product_solution": product.name
+        }
+    ]
 }
 ```
 
@@ -58,7 +65,7 @@ Response Body (Failed):
 ```
 
 ## Delete History
-Endpoint: DELETE /api/histories
+Endpoint: DELETE /api/histories/:historyId
 
 Headers:
 - Authorization: token

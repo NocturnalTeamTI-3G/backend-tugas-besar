@@ -9,32 +9,62 @@ Headers:
 Request Body:
 ``` json
 {
-    "nama_product": "x product",
-    "keterangan_product": "vitamin b99..."
+    "name": "x product",
+    "description": "vitamin b99..."
 }
 ```
 
 Response Body (Success):
 ```json
 {
-    "nama_product": "x product",
-    "keterangan_product": "vitamin b99..."
+    "name": "x product",
+    "description": "vitamin b99..."
 }
 ```
 
 ## Get Product
 Endpoint: GET /api/products
 
+Headers:
+- Authorization: token
+
 Response Body (Success):
 ```json
 {
-    "nama_product": "x product",
-    "keterangan_product": "vitamin b99..."
+    "data": [
+        {
+            "productId": 1,
+            "name": "x product",
+            "description": "vitamin b99..."
+        },
+        {
+            "productId": 2,
+            "name": "x product",
+            "description": "vitamin b99..."
+        }
+    ]
+}
+```
+
+## Find one product
+Endpoint: GET /api/products/:productId
+
+Headers: 
+- Authorization: token
+
+Response Body (Success):
+```json
+{
+    "data": {
+        "productId": 1,
+        "name": "x product",
+        "description": "vitamin b99..."
+    }
 }
 ```
 
 ## Update Product
-Endpoint: PATCH /api/products
+Endpoint: PATCH /api/products/:productId
 
 Headers:
 - Authorization: token
@@ -42,16 +72,16 @@ Headers:
 Request Body:
 ``` json
 {
-    "nama_product": "x product", // optional
-    "keterangan_product": "vitamin b99..." // optional
+    "name": "x product", // optional
+    "description": "vitamin b99..." // optional
 }
 ```
 
 Response Body (Success):
 ```json
 {
-    "nama_product": "x product",
-    "keterangan_product": "vitamin b99..."
+    "name": "x product",
+    "description": "vitamin b99..."
 }
 ```
 
@@ -64,7 +94,7 @@ Response Body (Failed):
 ```
 
 ## Delete Product
-Endpoint: DELETE /api/products
+Endpoint: DELETE /api/products/:productId
 
 Headers:
 - Authorization: token
