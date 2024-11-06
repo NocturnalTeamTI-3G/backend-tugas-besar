@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { TestService } from './test.service';
 import { TestModule } from './test.module';
+import exp from 'constants';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -82,6 +83,45 @@ describe('UserController', () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toBeDefined();
+    });
+  });
+
+  describe('POST /api/users/login', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser();
+    });
+
+    it('should be rejected if request invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: '',
+          password: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to login', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.username).toBe('test');
+      expect(response.body.data.email).toBe('test@gmail.com');
+      expect(response.body.data.profile_img).toBe('test.jpg');
+      expect(response.body.data.role_id).toBe(1);
+      expect(response.body.data.token).toBeDefined();
     });
   });
 });

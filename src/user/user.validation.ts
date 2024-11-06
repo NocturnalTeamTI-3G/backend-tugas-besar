@@ -8,4 +8,9 @@ export class UserValidation {
     password: z.string().min(8).max(255),
     profile_img: z.string(),
   });
+
+  static readonly LOGIN: ZodType = z.object({
+    email: z.string().email(),
+    password: z.string().min(8).max(255),
+  });
 }

@@ -6,6 +6,11 @@ export class RegisterUserRequest {
   profile_img: string;
 }
 
+export class LoginUserRequest {
+  email: string;
+  password: string;
+}
+
 export class UserResponse {
   id: number;
   username: string;
