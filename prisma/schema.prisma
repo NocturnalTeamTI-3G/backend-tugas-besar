@@ -35,7 +35,7 @@ model User {
   email       String   @unique @db.VarChar(255)
   profile_img String   @db.Text
   password    String   @db.VarChar(255)
-  token       String?   @db.VarChar(100)
+  token       String?  @db.VarChar(100)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 

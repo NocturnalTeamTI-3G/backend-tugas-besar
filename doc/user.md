@@ -9,7 +9,7 @@ Request Body :
     "username": "Isi Username",
     "email": "user@example.com",
     "password": "rahasia",
-    "roleId": 1,
+    "role_id_": 1,
     "profile_img": "profile_img.jpg"
 }
 ```
@@ -20,9 +20,9 @@ Response Body (Success):
     "data": {
         "username": "Isi Username",
         "email": "user@example.com",
-        "password": "rahasia",
-        "roleId": 1,
-        "profile_img": "profile_img.jpg"
+        "role_id": 1,
+        "profile_img": "profile_img.jpg",
+        "created_at": "xx/xx/xxxx yy:yy:yy"
     }
 }
 ```
@@ -77,7 +77,7 @@ Response Body (Success):
         "userId": 1,
         "email": "user@example.com",
         "username": "username",
-        "roleId": 1,
+        "role_id": 1,
         "profile_img": "img_user.jpg"
     }
 }
@@ -102,7 +102,7 @@ Request Body :
     "username": "Isi Username", // optional
     "email": "user@example.com", // optional
     "password": "rahasia", // optional
-    "roleId": 1, // optional
+    "role_id": 1, // optional
     "profile_img": "profile_img.jpg" // optional
 }
 ```
@@ -114,7 +114,7 @@ Response Body (Success):
         "username": "Isi Username",
         "email": "user@example.com",
         "password": "rahasia",
-        "roleId": 1,
+        "role_id": 1,
         "profile_img": "profile_img.jpg"
     }
 }
