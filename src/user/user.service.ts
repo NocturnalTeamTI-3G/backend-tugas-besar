@@ -150,4 +150,27 @@ export class UserService {
       role_id: updatedUser.role_id,
     };
   }
+
+  // Logic to logout current user
+  async logoutCurrentUser(user: User): Promise<UserResponse> {
+    this.logger.debug(`UserService.logoutCurrentUser: ${user.id}`);
+
+    // update token to null
+    const result = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        token: null,
+      },
+    });
+
+    return {
+      id: result.id,
+      username: result.username,
+      email: result.email,
+      profile_img: result.profile_img,
+      role_id: result.role_id,
+    };
+  }
 }
