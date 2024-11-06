@@ -35,7 +35,7 @@ model User {
   email       String   @unique @db.VarChar(255)
   profile_img String   @db.Text
   password    String   @db.VarChar(255)
-  token       String   @db.VarChar(100)
+  token       String?   @db.VarChar(100)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
@@ -51,10 +51,10 @@ model User {
 
 // Model Products
 model Product {
-  id          Int    @id @default(autoincrement())
-  name        String @db.VarChar(255)
-  description String @db.Text
-  product_img       String @db.Text
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  product_img String   @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
@@ -66,12 +66,12 @@ model Product {
 }
 
 model disease {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  description String @db.Text
-  solution String @db.Text
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  solution    String   @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   // History Disease Relation
   historyScan historyScan[]
@@ -81,11 +81,11 @@ model disease {
 }
 
 model historyScan {
-  id Int @id @default(autoincrement())
-  user_id Int
+  id         Int      @id @default(autoincrement())
+  user_id    Int
   disease_id Int
   product_id Int
-  face_img String @db.Text
+  face_img   String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
