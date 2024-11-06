@@ -90,7 +90,7 @@ Response Body (Failed):
 }
 ```
 
-## Update User
+## Update User (done)
 Endpoint: PATCH /api/users/current
 
 Headers:

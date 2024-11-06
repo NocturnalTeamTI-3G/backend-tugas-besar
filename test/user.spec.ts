@@ -155,4 +155,40 @@ describe('UserController', () => {
       expect(response.body.data.role_id).toBe(1);
     });
   });
+
+  describe('PATCH /api/users/current', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser();
+    });
+
+    it('should be rejected if token invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', 'wrong');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to update', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', 'test')
+        .send({
+          username: 'test123',
+          password: 'testtest',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.username).toBe('test123');
+      expect(response.body.data.email).toBe('test@gmail.com');
+      expect(response.body.data.profile_img).toBe('test.jpg');
+      expect(response.body.data.role_id).toBe(1);
+    });
+  });
 });

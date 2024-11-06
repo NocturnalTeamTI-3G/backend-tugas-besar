@@ -6,6 +6,14 @@ export class RegisterUserRequest {
   profile_img: string;
 }
 
+export class UpdateUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  role_id: number;
+  profile_img: string;
+}
+
 export class LoginUserRequest {
   email: string;
   password: string;

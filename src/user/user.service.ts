@@ -5,6 +5,7 @@ import { ValidationService } from '../common/validation.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
+  UpdateUserRequest,
   UserResponse,
 } from '../model/user.model';
 import { Logger } from 'winston';
@@ -112,6 +113,50 @@ export class UserService {
       username: user.username,
       email: user.email,
       profile_img: user.profile_img,
+    };
+  }
+
+  // Logic to update user current
+  async updateCurrentUser(
+    user: User,
+    request: RegisterUserRequest,
+  ): Promise<UserResponse> {
+    this.logger.info(
+      `UserService.updateUserCurrent: ${JSON.stringify(request)}`,
+    );
+    const updateUser: UpdateUserRequest = this.validationService.validate(
+      UserValidation.UPDATE,
+      request,
+    );
+
+    // find user by token
+    const userFound = await this.prismaService.user.findFirst({
+      where: {
+        id: user.id,
+      },
+    });
+
+    if (!userFound) {
+      throw new HttpException('Unauthorized', 401);
+    }
+
+    // Convert password to bcrypt
+    updateUser.password = await bcrypt.hash(updateUser.password, 10);
+
+    // Update user
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: updateUser,
+    });
+
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      profile_img: updatedUser.profile_img,
+      role_id: updatedUser.role_id,
     };
   }
 }
