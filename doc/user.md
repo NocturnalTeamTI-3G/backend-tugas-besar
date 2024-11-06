@@ -1,7 +1,7 @@
 # User API Spec
 
-## Register User
-Endpoint: POST /api/users
+## Register User (done)
+Endpoint: POST /api/users 
 
 Request Body : 
 ```json
@@ -34,7 +34,7 @@ Response Body (Failed):
 }
 ```
 
-## Login User
+## Login User (done)
 Endpoint: POST /api/users/login
 
 Request Body : 
@@ -64,7 +64,7 @@ Response Body (Failed):
 ```
 
 
-## Get User
+## Get User 
 Endpoint: GET /api/users/current
 
 Headers:
