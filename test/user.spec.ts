@@ -6,7 +6,6 @@ import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { TestService } from './test.service';
 import { TestModule } from './test.module';
-import exp from 'constants';
 
 describe('UserController', () => {
   let app: INestApplication;
