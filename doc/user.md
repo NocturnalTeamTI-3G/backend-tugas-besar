@@ -1,7 +1,7 @@
 # User API Spec
 
 ## Register User
-Endpoint: POST /api/users
+Endpoint: POST /api/users/register
 
 Request Body : 
 ```json
