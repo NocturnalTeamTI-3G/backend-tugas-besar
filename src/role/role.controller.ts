@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { RoleService } from './role.service';
-import { RoleRequest, RoleResponse } from 'src/model/role.model';
-import { WebResponse } from 'src/model/web.model';
+import { RoleRequest, RoleResponse } from '../model/role.model';
+import { WebResponse } from '../model/web.model';
 
 @Controller('/api/roles')
 export class RoleController {
