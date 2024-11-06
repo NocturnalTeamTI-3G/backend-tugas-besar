@@ -64,7 +64,7 @@ Response Body (Failed):
 ```
 
 
-## Get User 
+## Get User (Done)
 Endpoint: GET /api/users/current
 
 Headers:
@@ -90,7 +90,7 @@ Response Body (Failed):
 }
 ```
 
-## Update User
+## Update User (done)
 Endpoint: PATCH /api/users/current
 
 Headers:
@@ -127,7 +127,7 @@ Response Body (Failed):
 }
 ```
 
-## Logout User
+## Logout User (done)
 Endpoint: DELETE /api/users/current
 
 Headers:

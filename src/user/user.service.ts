@@ -5,12 +5,14 @@ import { ValidationService } from '../common/validation.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
+  UpdateUserRequest,
   UserResponse,
 } from '../model/user.model';
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -22,7 +24,7 @@ export class UserService {
 
   // Logic to register a new user
   async register(request: RegisterUserRequest): Promise<UserResponse> {
-    this.logger.info(`Registering a new user: ${JSON.stringify(request)}`);
+    this.logger.debug(`Registering a new user: ${JSON.stringify(request)}`);
     const registerRequest: RegisterUserRequest =
       this.validationService.validate(UserValidation.REGISTER, request);
 
@@ -56,7 +58,7 @@ export class UserService {
 
   // Logic login user
   async login(request: LoginUserRequest): Promise<UserResponse> {
-    this.logger.info(`UserService.login: ${JSON.stringify(request)}`);
+    this.logger.debug(`UserService.login: ${JSON.stringify(request)}`);
     const loginRequest: LoginUserRequest = this.validationService.validate(
       UserValidation.LOGIN,
       request,
@@ -100,6 +102,75 @@ export class UserService {
       profile_img: user.profile_img,
       role_id: user.role_id,
       token: user.token,
+    };
+  }
+
+  // Logic to get current user
+  async getCurrentUser(user: User): Promise<UserResponse> {
+    return {
+      id: user.id,
+      role_id: user.role_id,
+      username: user.username,
+      email: user.email,
+      profile_img: user.profile_img,
+    };
+  }
+
+  // Logic to update user current
+  async updateCurrentUser(
+    user: User,
+    request: RegisterUserRequest,
+  ): Promise<UserResponse> {
+    this.logger.debug(
+      `UserService.updateUserCurrent: ${JSON.stringify(request)}`,
+    );
+    const updateUser: UpdateUserRequest = this.validationService.validate(
+      UserValidation.UPDATE,
+      request,
+    );
+
+    if (updateUser.password) {
+      // Convert password to bcrypt
+      updateUser.password = await bcrypt.hash(updateUser.password, 10);
+    }
+
+    // Update user
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: updateUser,
+    });
+
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      profile_img: updatedUser.profile_img,
+      role_id: updatedUser.role_id,
+    };
+  }
+
+  // Logic to logout current user
+  async logoutCurrentUser(user: User): Promise<UserResponse> {
+    this.logger.debug(`UserService.logoutCurrentUser: ${user.id}`);
+
+    // update token to null
+    const result = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        token: null,
+      },
+    });
+
+    return {
+      id: result.id,
+      username: result.username,
+      email: result.email,
+      profile_img: result.profile_img,
+      role_id: result.role_id,
     };
   }
 }
