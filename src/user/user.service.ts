@@ -24,7 +24,7 @@ export class UserService {
 
   // Logic to register a new user
   async register(request: RegisterUserRequest): Promise<UserResponse> {
-    this.logger.info(`Registering a new user: ${JSON.stringify(request)}`);
+    this.logger.debug(`Registering a new user: ${JSON.stringify(request)}`);
     const registerRequest: RegisterUserRequest =
       this.validationService.validate(UserValidation.REGISTER, request);
 
@@ -58,7 +58,7 @@ export class UserService {
 
   // Logic login user
   async login(request: LoginUserRequest): Promise<UserResponse> {
-    this.logger.info(`UserService.login: ${JSON.stringify(request)}`);
+    this.logger.debug(`UserService.login: ${JSON.stringify(request)}`);
     const loginRequest: LoginUserRequest = this.validationService.validate(
       UserValidation.LOGIN,
       request,
@@ -121,24 +121,13 @@ export class UserService {
     user: User,
     request: RegisterUserRequest,
   ): Promise<UserResponse> {
-    this.logger.info(
+    this.logger.debug(
       `UserService.updateUserCurrent: ${JSON.stringify(request)}`,
     );
     const updateUser: UpdateUserRequest = this.validationService.validate(
       UserValidation.UPDATE,
       request,
     );
-
-    // find user by token
-    const userFound = await this.prismaService.user.findFirst({
-      where: {
-        id: user.id,
-      },
-    });
-
-    if (!userFound) {
-      throw new HttpException('Unauthorized', 401);
-    }
 
     // Convert password to bcrypt
     updateUser.password = await bcrypt.hash(updateUser.password, 10);

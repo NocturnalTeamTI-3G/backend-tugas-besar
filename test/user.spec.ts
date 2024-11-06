@@ -173,6 +173,21 @@ describe('UserController', () => {
       expect(response.body).toBeDefined();
     });
 
+    it('should be rejected if request invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', 'test')
+        .send({
+          username: '',
+          password: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
     it('should be able to update', async () => {
       const response = await request(app.getHttpServer())
         .patch('/api/users/current')
