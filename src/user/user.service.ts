@@ -129,8 +129,10 @@ export class UserService {
       request,
     );
 
-    // Convert password to bcrypt
-    updateUser.password = await bcrypt.hash(updateUser.password, 10);
+    if (updateUser.password) {
+      // Convert password to bcrypt
+      updateUser.password = await bcrypt.hash(updateUser.password, 10);
+    }
 
     // Update user
     const updatedUser = await this.prismaService.user.update({

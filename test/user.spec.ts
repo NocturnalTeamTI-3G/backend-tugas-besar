@@ -194,16 +194,37 @@ describe('UserController', () => {
         .set('Authorization', 'test')
         .send({
           username: 'test123',
-          password: 'testtest',
         });
 
       logger.info(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.username).toBe('test123');
+    });
+
+    it('should be able to login after update password', async () => {
+      let response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', 'test')
+        .send({
+          password: 'test1234',
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.username).toBe('test');
       expect(response.body.data.email).toBe('test@gmail.com');
-      expect(response.body.data.profile_img).toBe('test.jpg');
-      expect(response.body.data.role_id).toBe(1);
+
+      response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'test1234',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.token).toBeDefined();
     });
   });
 });
