@@ -64,7 +64,7 @@ Response Body (Failed):
 ```
 
 
-## Get User 
+## Get User (Done)
 Endpoint: GET /api/users/current
 
 Headers:

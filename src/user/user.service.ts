@@ -11,6 +11,7 @@ import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -100,6 +101,17 @@ export class UserService {
       profile_img: user.profile_img,
       role_id: user.role_id,
       token: user.token,
+    };
+  }
+
+  // Logic to get current user
+  async getCurrentUser(user: User): Promise<UserResponse> {
+    return {
+      id: user.id,
+      role_id: user.role_id,
+      username: user.username,
+      email: user.email,
+      profile_img: user.profile_img,
     };
   }
 }

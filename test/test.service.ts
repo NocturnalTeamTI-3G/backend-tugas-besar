@@ -22,6 +22,7 @@ export class TestService {
         email: 'test@gmail.com',
         profile_img: 'test.jpg',
         role_id: 1,
+        token: 'test',
       },
     });
   }
