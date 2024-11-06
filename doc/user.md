@@ -127,7 +127,7 @@ Response Body (Failed):
 }
 ```
 
-## Logout User
+## Logout User (done)
 Endpoint: DELETE /api/users/current
 
 Headers:
