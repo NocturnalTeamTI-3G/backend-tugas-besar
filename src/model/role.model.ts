@@ -5,4 +5,5 @@ export class RoleRequest {
 export class RoleResponse {
   id: number;
   name: string;
+  created_at: Date;
 }

@@ -8,7 +8,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   // API to register a new user
-  @Post('/register')
+  @Post()
   async registerUser(
     @Body() request: RegisterUserRequest,
   ): Promise<WebResponse<UserResponse>> {

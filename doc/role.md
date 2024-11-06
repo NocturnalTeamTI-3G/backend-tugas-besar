@@ -17,7 +17,9 @@ Response Body (Success):
 ```json
 {
     "data": {
+        "id": 1,
         "role": "diisi role",
+        "created_at": "xx/xx/xx yy:yy:yy"
     }
 }
 ```
