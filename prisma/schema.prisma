@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Role Model
+model Role {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(100)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // User Role Relation
+  users User[]
+
+  // Table name
+  @@map("roles")
+}
+
+// User Model
+model User {
+  id          Int      @id @default(autoincrement())
+  role_id     Int
+  username    String   @db.VarChar(100)
+  email       String   @unique @db.VarChar(255)
+  profile_img String   @db.Text
+  password    String   @db.VarChar(255)
+  token       String   @db.VarChar(100)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // User Role Relation
+  role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  // History User Relation
+  historyScan historyScan[]
+
+  // Table name
+  @@map("users")
+}
+
+// Model Products
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(255)
+  description String @db.Text
+  product_img       String @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // History Product Relation
+  historyScan historyScan[]
+
+  // Table name
+  @@map("products")
+}
+
+model disease {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  description String @db.Text
+  solution String @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // History Disease Relation
+  historyScan historyScan[]
+
+  // Table name
+  @@map("diseases")
+}
+
+model historyScan {
+  id Int @id @default(autoincrement())
+  user_id Int
+  disease_id Int
+  product_id Int
+  face_img String @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // User History Relation
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Disease History Relation
+  disease disease @relation(fields: [disease_id], references: [id], onDelete: Cascade)
+
+  // Product History Relation
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  // Table name
+  @@map("history_scans")
+}
