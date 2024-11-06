@@ -73,6 +73,7 @@ export class UserController {
     };
   }
 
+  // API to logout current user
   @Delete('/current')
   @HttpCode(200)
   async logoutCurrentUser(@Auth() user: User): Promise<WebResponse<boolean>> {
