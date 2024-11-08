@@ -6,6 +6,7 @@ export class UserValidation {
     username: z.string().min(1).max(255),
     email: z.string().email(),
     password: z.string().min(8).max(255),
+    gender: z.string().min(1).max(10),
     profile_img: z.string(),
   });
 
@@ -19,6 +20,7 @@ export class UserValidation {
     username: z.string().min(1).max(255).optional(),
     email: z.string().email().optional(),
     password: z.string().min(8).max(255).optional(),
+    gender: z.string().min(1).max(10).optional(),
     profile_img: z.string().optional(),
   });
 }

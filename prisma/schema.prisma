@@ -33,7 +33,8 @@ model User {
   role_id     Int
   username    String   @db.VarChar(100)
   email       String   @unique @db.VarChar(255)
-  profile_img String   @db.Text
+  gender      String   @db.VarChar(10)
+  profile_img String?  @db.Text
   password    String   @db.VarChar(255)
   token       String?  @db.VarChar(100)
   created_at  DateTime @default(now())

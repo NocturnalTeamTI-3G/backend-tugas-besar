@@ -21,6 +21,7 @@ export class TestService {
         password: await bcrypt.hash('testtest', 10),
         email: 'test@gmail.com',
         profile_img: 'test.jpg',
+        gender: 'test',
         role_id: 1,
         token: 'test',
       },
