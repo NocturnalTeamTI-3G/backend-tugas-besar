@@ -76,4 +76,46 @@ export class ProductService {
       product_img: product.product_img,
     };
   }
+
+  // Logic to update product by id
+  async updateProductById(
+    productId: number,
+    request: ProductRequest,
+  ): Promise<ProductResponse> {
+    this.logger.info(
+      `ProductService.updateProductById: ${productId}, ${request}`,
+    );
+
+    // Check product exists
+    const existingProduct = await this.prismaService.product.findFirst({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!existingProduct) {
+      throw new HttpException('Product not found', 404);
+    }
+
+    // Validate request
+    const product: ProductRequest = this.validationService.validate(
+      ProductValidation.UPDATE,
+      request,
+    );
+
+    // Update product
+    const updatedProduct = await this.prismaService.product.update({
+      where: {
+        id: productId,
+      },
+      data: product,
+    });
+
+    return {
+      id: updatedProduct.id,
+      name: updatedProduct.name,
+      description: updatedProduct.description,
+      product_img: updatedProduct.product_img,
+    };
+  }
 }

@@ -145,4 +145,79 @@ describe('UserController', () => {
       expect(response.body.data).toBeDefined();
     });
   });
+
+  describe('PATCH /api/products', () => {
+    beforeEach(async () => {
+      await testService.deleteProduct();
+      await testService.createProduct();
+
+      // Perform login and get the auth token
+      const loginAdminResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authToken = loginAdminResponse.body.data.token;
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if not admin', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/products/1`)
+        .set('Authorization', `${authTokenMember}`)
+        .send({
+          name: 'test',
+          description: 'test',
+          product_img: 'test.jpg',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and invalid request', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/products/1`)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: '',
+          description: '',
+          product_img: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to create product', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/products/1`)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: 'test product',
+          description: 'test product123',
+          product_img: 'test.jpg',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.name).toBe('test product');
+      expect(response.body.data.description).toBe('test product123');
+      expect(response.body.data.product_img).toBe('test.jpg');
+    });
+  });
 });

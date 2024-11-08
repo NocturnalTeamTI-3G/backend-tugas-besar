@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { WebResponse } from '../model/web.model';
 import { ProductRequest, ProductResponse } from '../model/product.model';
 import { ProductService } from './product.service';
 import { Auth } from '../common/auth.decorator';
+import { request } from 'http';
 
 @Controller('/api/products')
 @UseGuards(RolesGuard)
@@ -53,6 +55,24 @@ export class ProductController {
     @Param('productId', ParseIntPipe) productId: number,
   ): Promise<WebResponse<ProductResponse>> {
     const product = await this.productService.getProductById(productId);
+
+    return {
+      data: product,
+    };
+  }
+
+  // API to delete product by id
+  @Patch('/:productId')
+  @Roles('admin')
+  @HttpCode(200)
+  async updateProductById(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Body() request: ProductRequest,
+  ): Promise<WebResponse<ProductResponse>> {
+    const product = await this.productService.updateProductById(
+      productId,
+      request,
+    );
 
     return {
       data: product,
