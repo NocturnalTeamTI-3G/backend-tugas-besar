@@ -55,4 +55,20 @@ export class RoleService {
       name: role.name,
     };
   }
+
+  // Logic to get all roles
+  async getAllRoles(): Promise<RoleResponse[]> {
+    this.logger.info('Role.service.getAllRoles');
+
+    // Get all roles
+    const roles = await this.prismaService.role.findMany();
+
+    // Return roles response
+    return roles.map((role) => {
+      return {
+        id: role.id,
+        name: role.name,
+      };
+    });
+  }
 }

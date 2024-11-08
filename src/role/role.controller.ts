@@ -28,6 +28,17 @@ export class RoleController {
     };
   }
 
+  // API to get all roles
+  @Get()
+  @HttpCode(200)
+  async getAllRoles(): Promise<WebResponse<RoleResponse[]>> {
+    const roles = await this.roleService.getAllRoles();
+
+    return {
+      data: roles,
+    };
+  }
+
   // API to get role by id
   @Get('/:roleId')
   @HttpCode(200)

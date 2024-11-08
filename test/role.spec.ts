@@ -57,6 +57,17 @@ describe('UserController', () => {
     });
   });
 
+  describe('GET /api/roles', () => {
+    it('should be able to get all roles', async () => {
+      const response = await request(app.getHttpServer()).get('/api/roles');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
   describe('GET /api/roles/:roleId', () => {
     it('should be rejected if role not found', async () => {
       const response = await request(app.getHttpServer()).get(
