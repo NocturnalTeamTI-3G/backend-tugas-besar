@@ -25,6 +25,9 @@ export class UserService {
   // Logic to register a new user
   async register(request: RegisterUserRequest): Promise<UserResponse> {
     this.logger.debug(`Registering a new user: ${JSON.stringify(request)}`);
+
+    request.role_id = parseInt(request.role_id.toString());
+
     const registerRequest: RegisterUserRequest =
       this.validationService.validate(UserValidation.REGISTER, request);
 

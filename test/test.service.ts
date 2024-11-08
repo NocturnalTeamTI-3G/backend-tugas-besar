@@ -42,4 +42,22 @@ export class TestService {
       },
     });
   }
+
+  async createProduct() {
+    await this.prismaService.product.create({
+      data: {
+        name: 'test',
+        description: 'test',
+        product_img: 'test.jpg',
+      },
+    });
+  }
+
+  async deleteProduct() {
+    await this.prismaService.product.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
 }
