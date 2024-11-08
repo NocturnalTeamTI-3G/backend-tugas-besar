@@ -100,4 +100,31 @@ export class RoleService {
       name: updatedRole.name,
     };
   }
+
+  // Logic to delete role
+  async deleteRole(id: number): Promise<RoleResponse> {
+    this.logger.info(`Role.service.deleteRole: ${id}`);
+
+    const role = await this.prismaService.role.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!role) {
+      throw new HttpException('Role not found', 400);
+    }
+
+    // delete role
+    const deletedRole = await this.prismaService.role.delete({
+      where: {
+        id: role.id,
+      },
+    });
+
+    return {
+      id: deletedRole.id,
+      name: deletedRole.name,
+    };
+  }
 }

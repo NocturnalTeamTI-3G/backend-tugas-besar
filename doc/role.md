@@ -43,7 +43,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "error": "Unauthorized"
+    "error": "Role not found"
 }
 ```
 
@@ -63,7 +63,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "error": "Unauthorized"
+    "error": "Role not found"
 }
 ```
 
@@ -93,8 +93,7 @@ Endpoint: DELETE /api/roles/:roleId
 Response Body (Success):
 ```json
 {
-    "status": 200,
-    "message": "Role has been deleted"
+    message: true
 }
 ```
 

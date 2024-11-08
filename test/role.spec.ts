@@ -133,4 +133,41 @@ describe('UserController', () => {
       expect(response.body.data.name).toBe('admin');
     });
   });
+
+  describe('DELETE /api/roles/:roleId', () => {
+    beforeEach(async () => {
+      await testService.deleteRole();
+      await testService.createRole();
+    });
+
+    it('should be rejected if role not found', async () => {
+      const response = await request(app.getHttpServer()).delete(
+        '/api/roles/9999',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to delete role', async () => {
+      const createResponse = await request(app.getHttpServer())
+        .post('/api/roles')
+        .send({
+          name: 'test',
+        });
+
+      const roleId = createResponse.body.data.id;
+
+      const response = await request(app.getHttpServer()).delete(
+        `/api/roles/${roleId}`,
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBeTruthy();
+    });
+  });
 });

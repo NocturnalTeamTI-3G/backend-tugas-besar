@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -62,6 +63,17 @@ export class RoleController {
 
     return {
       data: role,
+    };
+  }
+
+  // API to delete role by id
+  @Delete('/:roleId')
+  @HttpCode(200)
+  async deleteRoleById(@Param('roleId', ParseIntPipe) roleId: number) {
+    await this.roleService.deleteRole(roleId);
+
+    return {
+      message: true,
     };
   }
 }
