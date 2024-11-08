@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
@@ -31,6 +31,28 @@ export class RoleService {
       id: newRole.id,
       name: newRole.name,
       created_at: newRole.created_at,
+    };
+  }
+
+  // Logic to get role by id
+  async getRoleById(id: number): Promise<RoleResponse> {
+    this.logger.info(`Role.service.getRoleById: ${id}`);
+
+    // Get role by id
+    const role = await this.prismaService.role.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!role) {
+      throw new HttpException('Role not found', 400);
+    }
+
+    // Return role response
+    return {
+      id: role.id,
+      name: role.name,
     };
   }
 }

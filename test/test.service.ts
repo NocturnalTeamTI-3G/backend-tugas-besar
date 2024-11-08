@@ -26,4 +26,12 @@ export class TestService {
       },
     });
   }
+
+  async deleteRole() {
+    await this.prismaService.role.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
 }

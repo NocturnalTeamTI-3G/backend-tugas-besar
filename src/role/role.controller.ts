@@ -1,4 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleRequest, RoleResponse } from '../model/role.model';
 import { WebResponse } from '../model/web.model';
@@ -9,6 +17,7 @@ export class RoleController {
 
   // API to create a new role
   @Post()
+  @HttpCode(200)
   async createRole(
     @Body() request: RoleRequest,
   ): Promise<WebResponse<RoleResponse>> {
@@ -16,6 +25,17 @@ export class RoleController {
 
     return {
       data: newRole,
+    };
+  }
+
+  // API to get role by id
+  @Get('/:roleId')
+  @HttpCode(200)
+  async getRoleById(@Param('roleId', ParseIntPipe) roleId: number) {
+    const role = await this.roleService.getRoleById(roleId);
+
+    return {
+      data: role,
     };
   }
 }
