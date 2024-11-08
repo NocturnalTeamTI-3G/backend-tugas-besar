@@ -23,6 +23,6 @@ Untuk env lakukan **copy dan paste** file ```.env.example``` terus rename jadi `
 Untuk dokumentasi API Specification bisa diliat di link berikut inih:
 - [User API Spec](./doc/user.md) (Done)
 - [Role API Spec](./doc/role.md) (done)
-- [Product API Spec](./doc/product.md) (create - update done)
+- [Product API Spec](./doc/product.md) (done)
 - [Disease API Spec](./doc/disease.md) (In Progress)
 - [Scan History API Spec](./doc/history.md) (In Progress)
