@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -61,7 +62,7 @@ export class ProductController {
     };
   }
 
-  // API to delete product by id
+  // API to update product by id
   @Patch('/:productId')
   @Roles('admin')
   @HttpCode(200)
@@ -76,6 +77,18 @@ export class ProductController {
 
     return {
       data: product,
+    };
+  }
+
+  // API to delete product by id
+  @Delete('/:productId')
+  @Roles('admin')
+  @HttpCode(200)
+  async deleteProductById(@Param('productId', ParseIntPipe) productId: number) {
+    await this.productService.deleteProductById(productId);
+
+    return {
+      message: true,
     };
   }
 }

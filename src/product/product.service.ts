@@ -118,4 +118,34 @@ export class ProductService {
       product_img: updatedProduct.product_img,
     };
   }
+
+  // Logic to delete product by id
+  async deleteProductById(productId: number): Promise<ProductResponse> {
+    this.logger.info(`ProductService.deleteProductById: ${productId}`);
+
+    // Check product exists
+    const existingProduct = await this.prismaService.product.findFirst({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!existingProduct) {
+      throw new HttpException('Product not found', 404);
+    }
+
+    // Delete product
+    await this.prismaService.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+
+    return {
+      id: existingProduct.id,
+      name: existingProduct.name,
+      description: existingProduct.description,
+      product_img: existingProduct.product_img,
+    };
+  }
 }

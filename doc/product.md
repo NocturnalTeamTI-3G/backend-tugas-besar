@@ -103,8 +103,7 @@ Headers:
 Response Body (Success):
 ```json
 {
-    "status": 200,
-    "message": "Product has been deleted."
+    "message": true
 }
 ```
 
