@@ -89,4 +89,48 @@ describe('UserController', () => {
       expect(response.body.data.name).toBe('admin');
     });
   });
+
+  describe('PATCH /api/roles/:roleId', () => {
+    beforeEach(async () => {
+      await testService.deleteRole();
+      await testService.createRole();
+    });
+
+    it('should be rejected if role not found', async () => {
+      const response = await request(app.getHttpServer()).patch(
+        '/api/roles/9999',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if request invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/roles/1')
+        .send({
+          name: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to update role', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/roles/1')
+        .send({
+          name: 'admin',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.name).toBe('admin');
+    });
+  });
 });

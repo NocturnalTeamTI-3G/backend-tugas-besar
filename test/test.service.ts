@@ -34,4 +34,12 @@ export class TestService {
       },
     });
   }
+
+  async createRole() {
+    await this.prismaService.role.create({
+      data: {
+        name: 'test',
+      },
+    });
+  }
 }

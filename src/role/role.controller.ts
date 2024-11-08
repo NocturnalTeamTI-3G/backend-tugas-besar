@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
@@ -44,6 +45,20 @@ export class RoleController {
   @HttpCode(200)
   async getRoleById(@Param('roleId', ParseIntPipe) roleId: number) {
     const role = await this.roleService.getRoleById(roleId);
+
+    return {
+      data: role,
+    };
+  }
+
+  // API to update role by id
+  @Patch('/:roleId')
+  @HttpCode(200)
+  async updateRoleById(
+    @Param('roleId', ParseIntPipe) roleId: number,
+    @Body() request: RoleRequest,
+  ) {
+    const role = await this.roleService.updateRole(roleId, request);
 
     return {
       data: role,

@@ -71,4 +71,33 @@ export class RoleService {
       };
     });
   }
+
+  // Logic to update role
+  async updateRole(id: number, request: RoleRequest): Promise<RoleResponse> {
+    this.logger.info(`Role.service.updateRole: ${id}, ${request}`);
+
+    // Validate request
+    const roleRequest: RoleRequest = this.validationService.validate(
+      RoleValidation.UPDATE,
+      request,
+    );
+
+    // Update role
+    const updatedRole = await this.prismaService.role.update({
+      where: {
+        id: id,
+      },
+      data: roleRequest,
+    });
+
+    if (!updatedRole) {
+      throw new HttpException('Role not found', 400);
+    }
+
+    // Return role response
+    return {
+      id: updatedRole.id,
+      name: updatedRole.name,
+    };
+  }
 }
