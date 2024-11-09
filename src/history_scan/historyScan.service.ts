@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
@@ -50,5 +50,32 @@ export class HistoryScanService {
       description_product: historyScan.product.description,
       face_img: historyScan.face_img,
     };
+  }
+
+  // Logic to get all history
+  async getAllHistories(user: User): Promise<HistoryScanResponse[]> {
+    this.logger.info('HistoryScanService.getHistories');
+    const histories = await this.prismaService.historyScan.findMany({
+      where: { user_id: user.id },
+      include: {
+        disease: true,
+        product: true,
+      },
+    });
+
+    if (!histories) {
+      throw new HttpException('Histories was empty', 404);
+    }
+
+    return histories.map((history) => ({
+      id: history.id,
+      userId: history.user_id,
+      disease: history.disease.name,
+      description_disease: history.disease.description,
+      solution_disease: history.disease.solution,
+      product: history.product.name,
+      description_product: history.product.description,
+      face_img: history.face_img,
+    }));
   }
 }

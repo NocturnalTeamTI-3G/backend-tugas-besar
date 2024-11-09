@@ -35,7 +35,7 @@ Response Body (Success):
 }
 ```
 
-## Get History
+## Get History (done)
 
 Endpoint: GET /api/histories
 
