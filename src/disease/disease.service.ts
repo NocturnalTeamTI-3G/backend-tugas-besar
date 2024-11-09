@@ -39,4 +39,20 @@ export class DiseaseService {
       solution: createdDisease.solution,
     };
   }
+
+  // Logic to get all diseases
+  async getAllDiseases(): Promise<DiseaseResponse[]> {
+    this.logger.info('DiseaseService.getAllDiseases');
+
+    const diseases = await this.prismaService.disease.findMany();
+
+    return diseases.map((disease) => {
+      return {
+        id: disease.id,
+        name: disease.name,
+        description: disease.description,
+        solution: disease.solution,
+      };
+    });
+  }
 }

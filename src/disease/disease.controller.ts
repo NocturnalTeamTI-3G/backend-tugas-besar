@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { RolesGuard } from '../common/roles.guard';
 import { DiseaseService } from './disease.service';
 import { Roles } from '../common/roles.decorator';
@@ -21,6 +28,17 @@ export class DiseaseController {
 
     return {
       data: disease,
+    };
+  }
+
+  // API to get all diseases
+  @Get()
+  @HttpCode(200)
+  async getAllDiseases(): Promise<WebResponse<DiseaseResponse[]>> {
+    const diseases = await this.diseaseService.getAllDiseases();
+
+    return {
+      data: diseases,
     };
   }
 }

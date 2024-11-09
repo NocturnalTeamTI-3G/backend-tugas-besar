@@ -1,6 +1,6 @@
 # Disease API Spec
 
-## Create Disease
+## Create Disease (done)
 Endpoint: POST /api/diseases
 
 Headers:
@@ -33,11 +33,8 @@ Response Body (Failed):
 }
 ```
 
-## Get All Diseases
+## Get All Diseases (Done)
 Endpoint: GET /api/diseases
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json

@@ -100,4 +100,20 @@ describe('UserController', () => {
       expect(response.body.data.solution).toBe('test');
     });
   });
+
+  describe('GET /api/diseases', () => {
+    beforeEach(async () => {
+      await testService.deleteDisease();
+      await testService.createDisease();
+    });
+
+    it('should be able to get all diseases', async () => {
+      const response = await request(app.getHttpServer()).get('/api/diseases');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
 });
