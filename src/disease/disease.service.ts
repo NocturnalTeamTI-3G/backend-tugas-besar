@@ -1,0 +1,42 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '../common/prisma.service';
+import { Logger } from 'winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { DiseaseRequest, DiseaseResponse } from '../model/disease.model';
+import { ValidationService } from '../common/validation.service';
+import { DiseaseValidation } from './disease.validation';
+
+@Injectable()
+export class DiseaseService {
+  constructor(
+    private validationService: ValidationService,
+    private prismaService: PrismaService,
+    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
+  ) {}
+
+  // Logic create new disease
+  async createDisease(request: DiseaseRequest): Promise<DiseaseResponse> {
+    this.logger.info('DiseaseService.createDisease');
+
+    const disease: DiseaseRequest = this.validationService.validate(
+      DiseaseValidation.CREATE,
+      request,
+    );
+
+    // Create disease
+    const createdDisease = await this.prismaService.disease.create({
+      data: {
+        name: disease.name,
+        description: disease.description,
+        solution: disease.solution,
+      },
+    });
+
+    return {
+      id: createdDisease.id,
+      name: createdDisease.name,
+      description: createdDisease.description,
+      solution: createdDisease.solution,
+    };
+  }
+}

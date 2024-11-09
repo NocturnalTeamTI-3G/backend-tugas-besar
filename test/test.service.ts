@@ -61,4 +61,22 @@ export class TestService {
       },
     });
   }
+
+  async createDisease() {
+    await this.prismaService.disease.create({
+      data: {
+        name: 'test',
+        description: 'test',
+        solution: 'test',
+      },
+    });
+  }
+
+  async deleteDisease() {
+    await this.prismaService.disease.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
 }

@@ -18,6 +18,7 @@ Request Body:
 Response Body (Success):
 ```json
 {
+    "id": 1,
     "name": "nama penyakit",
     "description": "deskripsi penyakit",
     "solution": "solusi penyakit"
@@ -27,7 +28,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
@@ -61,7 +62,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
@@ -85,7 +86,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
@@ -116,7 +117,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
@@ -139,7 +140,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized"
 }
 ```
