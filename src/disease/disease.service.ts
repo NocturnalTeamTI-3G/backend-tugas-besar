@@ -119,4 +119,28 @@ export class DiseaseService {
       solution: updatedDisease.solution,
     };
   }
+
+  // Logic to delete disease by id
+  async deleteDiseaseById(diseaseId: number): Promise<boolean> {
+    this.logger.info('DiseaseService.deleteDiseaseById');
+
+    const checkDisease = await this.prismaService.disease.findFirst({
+      where: {
+        id: diseaseId,
+      },
+    });
+
+    if (!checkDisease) {
+      throw new HttpException('Disease not found', 404);
+    }
+
+    // Delete disease
+    await this.prismaService.disease.delete({
+      where: {
+        id: diseaseId,
+      },
+    });
+
+    return true;
+  }
 }

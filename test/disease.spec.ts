@@ -253,4 +253,64 @@ describe('UserController', () => {
       expect(response.body.data.solution).toBe('test');
     });
   });
+
+  describe('DELETE /api/diseases/:diseaseId', () => {
+    beforeEach(async () => {
+      await testService.deleteDisease();
+      await testService.createDisease();
+
+      diseaseId = await testService.getDiseaseById();
+
+      // Perform login and get the auth token
+      const loginAdminResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authToken = loginAdminResponse.body.data.token;
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if not admin', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/diseases/${diseaseId}`)
+        .set('Authorization', `${authTokenMember}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and disease not found', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/diseases/999999`)
+        .set('Authorization', `${authToken}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to delete', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/diseases/${diseaseId}`)
+        .set('Authorization', `${authToken}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeTruthy();
+    });
+  });
 });

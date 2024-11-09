@@ -109,7 +109,7 @@ Response Body (Failed):
 }
 ```
 
-## Delete Disease
+## Delete Disease (done)
 
 Endpoint: DELETE /api/diseases/:diseaseId
 

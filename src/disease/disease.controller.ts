@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -70,6 +71,20 @@ export class DiseaseController {
       diseaseId,
       request,
     );
+
+    return {
+      data: disease,
+    };
+  }
+
+  // API to delete disease by id
+  @Delete('/:diseaseId')
+  @Roles('admin')
+  @HttpCode(200)
+  async deleteDisease(
+    @Param('diseaseId', ParseIntPipe) diseaseId: number,
+  ): Promise<WebResponse<boolean>> {
+    const disease = await this.diseaseService.deleteDiseaseById(diseaseId);
 
     return {
       data: disease,
