@@ -78,4 +78,28 @@ export class HistoryScanService {
       face_img: history.face_img,
     }));
   }
+
+  // Logic to delete history by id
+  async deleteHistoryScanById(user: User, historyId: number): Promise<boolean> {
+    this.logger.info('HistoryScanService.deleteHistoryScanById');
+
+    // Check token
+    if (user.token === null) {
+      throw new HttpException('Unauthorized', 401);
+    }
+
+    const history = await this.prismaService.historyScan.findUnique({
+      where: { id: historyId },
+    });
+
+    if (!history) {
+      throw new HttpException('History not found', 404);
+    }
+
+    await this.prismaService.historyScan.delete({
+      where: { id: historyId },
+    });
+
+    return true;
+  }
 }

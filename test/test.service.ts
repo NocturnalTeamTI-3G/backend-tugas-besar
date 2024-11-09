@@ -109,4 +109,14 @@ export class TestService {
       },
     });
   }
+
+  async getHistoryScanId(): Promise<number> {
+    const historyScan = await this.prismaService.historyScan.findFirst({
+      where: {
+        face_img: 'test.jpg',
+      },
+    });
+
+    return historyScan.id;
+  }
 }

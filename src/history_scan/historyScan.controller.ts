@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { HistoryScanService } from './historyScan.service';
 import { Auth } from '../common/auth.decorator';
 import {
@@ -39,6 +48,23 @@ export class HistoryScanController {
 
     return {
       data: histories,
+    };
+  }
+
+  // API to delete history by id
+  @Delete('/:historyId')
+  @HttpCode(200)
+  async deleteHistoryScan(
+    @Auth() user: User,
+    @Param('historyId', ParseIntPipe) historyId: number,
+  ): Promise<WebResponse<boolean>> {
+    const deletedHistory = await this.historyScanService.deleteHistoryScanById(
+      user,
+      historyId,
+    );
+
+    return {
+      data: deletedHistory,
     };
   }
 }

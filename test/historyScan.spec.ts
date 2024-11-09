@@ -12,6 +12,7 @@ describe('UserController', () => {
   let logger: Logger;
   let testService: TestService;
   let authTokenMember: string;
+  let historyId: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -124,6 +125,57 @@ describe('UserController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('DELETE /api/histories/:historyId', () => {
+    beforeEach(async () => {
+      await testService.deleteHistoryScan();
+      await testService.createHistoryScan();
+
+      historyId = await testService.getHistoryScanId();
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if dont have token', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/histories/${historyId}`)
+        .set('Authorization', `wrong`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if wrong id', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/api/histories/999999')
+        .set('Authorization', `${authTokenMember}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to delete history', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/histories/${historyId}`)
+        .set('Authorization', `${authTokenMember}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeTruthy();
     });
   });
 });

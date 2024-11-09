@@ -77,7 +77,7 @@ Response Body (Failed):
 }
 ```
 
-## Delete History
+## Delete History (done)
 
 Endpoint: DELETE /api/histories/:historyId
 
@@ -90,7 +90,7 @@ Response Body (Success):
 ```json
 {
   "status": 200,
-  "message": "History has been deleted"
+  "message": true
 }
 ```
 
