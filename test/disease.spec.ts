@@ -107,6 +107,16 @@ describe('UserController', () => {
       await testService.createDisease();
     });
 
+    it('should be rejected if diseases was empty', async () => {
+      await testService.deleteDisease();
+      const response = await request(app.getHttpServer()).get('/api/diseases');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
     it('should be able to get all diseases', async () => {
       const response = await request(app.getHttpServer()).get('/api/diseases');
 

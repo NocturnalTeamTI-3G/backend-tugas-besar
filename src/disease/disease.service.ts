@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -46,6 +46,10 @@ export class DiseaseService {
 
     const diseases = await this.prismaService.disease.findMany();
 
+    if (!diseases || diseases.length === 0) {
+      throw new HttpException('No diseases found', 404);
+    }
+
     return diseases.map((disease) => {
       return {
         id: disease.id,
@@ -55,4 +59,6 @@ export class DiseaseService {
       };
     });
   }
+
+  // Logic to get disease by id
 }

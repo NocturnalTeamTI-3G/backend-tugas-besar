@@ -56,14 +56,6 @@ Response Body (Success):
 }
 ```
 
-Response Body (Failed):
-```json
-{
-    "status": 401,
-    "message": "Unauthorized",
-}
-```
-
 ## Search Disease
 Endpoint: GET /api/diseases/:diseaseId
 
