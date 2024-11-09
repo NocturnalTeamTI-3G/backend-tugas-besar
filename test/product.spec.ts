@@ -223,7 +223,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('PATCH /api/products', () => {
+  describe('DELETE /api/products', () => {
     beforeEach(async () => {
       await testService.deleteProduct();
       await testService.createProduct();

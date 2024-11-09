@@ -61,4 +61,26 @@ export class DiseaseService {
   }
 
   // Logic to get disease by id
+  async getDiseaseById(diseaseId: number): Promise<DiseaseResponse> {
+    this.logger.info('DiseaseService.getDiseaseById');
+
+    diseaseId = parseInt(diseaseId.toString(), 10);
+
+    const disease = await this.prismaService.disease.findFirst({
+      where: {
+        id: diseaseId,
+      },
+    });
+
+    if (!disease) {
+      throw new HttpException('Disease not found', 404);
+    }
+
+    return {
+      id: disease.id,
+      name: disease.name,
+      description: disease.description,
+      solution: disease.solution,
+    };
+  }
 }

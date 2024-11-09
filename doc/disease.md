@@ -56,11 +56,8 @@ Response Body (Success):
 }
 ```
 
-## Search Disease
+## Search Disease (done)
 Endpoint: GET /api/diseases/:diseaseId
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json
@@ -75,8 +72,8 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 401,
-    "message": "Unauthorized",
+    "status": 404,
+    "message": "Disease Not Found",
 }
 ```
 

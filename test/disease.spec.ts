@@ -13,6 +13,7 @@ describe('UserController', () => {
   let testService: TestService;
   let authToken: string;
   let authTokenMember: string;
+  let diseaseId: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -124,6 +125,39 @@ describe('UserController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('GET /api/diseases/:diseaseId', () => {
+    beforeEach(async () => {
+      await testService.deleteDisease();
+      await testService.createDisease();
+      diseaseId = await testService.getDiseaseById();
+    });
+
+    it('should be rejected if diseases was not found', async () => {
+      await testService.deleteDisease();
+      const response = await request(app.getHttpServer()).get(
+        '/api/diseases/9999',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to get disease by id', async () => {
+      const response = await request(app.getHttpServer()).get(
+        `/api/diseases/${diseaseId}`,
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.name).toBe('test');
+      expect(response.body.data.description).toBe('test');
+      expect(response.body.data.solution).toBe('test');
     });
   });
 });

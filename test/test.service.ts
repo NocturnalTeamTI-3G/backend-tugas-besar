@@ -79,4 +79,14 @@ export class TestService {
       },
     });
   }
+
+  async getDiseaseById(): Promise<number> {
+    const disease = await this.prismaService.disease.findFirst({
+      where: {
+        name: 'test',
+      },
+    });
+
+    return disease.id;
+  }
 }

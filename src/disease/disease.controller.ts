@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -39,6 +40,18 @@ export class DiseaseController {
 
     return {
       data: diseases,
+    };
+  }
+
+  @Get('/:diseaseId')
+  @HttpCode(200)
+  async getDiseaseById(
+    @Param('diseaseId') diseaseId: number,
+  ): Promise<WebResponse<DiseaseResponse>> {
+    const disease = await this.diseaseService.getDiseaseById(diseaseId);
+
+    return {
+      data: disease,
     };
   }
 }
