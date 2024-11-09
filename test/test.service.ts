@@ -89,4 +89,24 @@ export class TestService {
 
     return disease.id;
   }
+
+  // Create a history scan
+  async createHistoryScan() {
+    await this.prismaService.historyScan.create({
+      data: {
+        user_id: 328,
+        disease_id: 1,
+        product_id: 1,
+        face_img: 'test.jpg',
+      },
+    });
+  }
+
+  async deleteHistoryScan() {
+    await this.prismaService.historyScan.deleteMany({
+      where: {
+        face_img: 'test.jpg',
+      },
+    });
+  }
 }
