@@ -64,8 +64,6 @@ export class DiseaseService {
   async getDiseaseById(diseaseId: number): Promise<DiseaseResponse> {
     this.logger.info('DiseaseService.getDiseaseById');
 
-    diseaseId = parseInt(diseaseId.toString(), 10);
-
     const disease = await this.prismaService.disease.findFirst({
       where: {
         id: diseaseId,
@@ -81,6 +79,44 @@ export class DiseaseService {
       name: disease.name,
       description: disease.description,
       solution: disease.solution,
+    };
+  }
+
+  // Logic to update disease by id
+  async updateDiseaseById(
+    diseaseId: number,
+    request: DiseaseRequest,
+  ): Promise<DiseaseResponse> {
+    this.logger.info('DiseaseService.updateDiseaseById');
+
+    const disease: DiseaseRequest = this.validationService.validate(
+      DiseaseValidation.UPDATE,
+      request,
+    );
+
+    const checkDisease = await this.prismaService.disease.findFirst({
+      where: {
+        id: diseaseId,
+      },
+    });
+
+    if (!checkDisease) {
+      throw new HttpException('Disease not found', 404);
+    }
+
+    // Update disease
+    const updatedDisease = await this.prismaService.disease.update({
+      where: {
+        id: diseaseId,
+      },
+      data: disease,
+    });
+
+    return {
+      id: updatedDisease.id,
+      name: updatedDisease.name,
+      description: updatedDisease.description,
+      solution: updatedDisease.solution,
     };
   }
 }

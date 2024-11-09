@@ -77,7 +77,7 @@ Response Body (Failed):
 }
 ```
 
-## Update Disease
+## Update Disease (done)
 Endpoint: PATCH /api/diseases/:diseaseId
 
 Headers:
@@ -97,6 +97,7 @@ Response Body (Success):
 {
     "name": "nama penyakit",
     "description": "deskripsi penyakit",
+    "solution": "solusi penyakit"
 }
 ```
 

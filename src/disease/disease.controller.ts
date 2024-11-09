@@ -4,6 +4,8 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -43,12 +45,31 @@ export class DiseaseController {
     };
   }
 
+  // API to get disease by id
   @Get('/:diseaseId')
   @HttpCode(200)
   async getDiseaseById(
-    @Param('diseaseId') diseaseId: number,
+    @Param('diseaseId', ParseIntPipe) diseaseId: number,
   ): Promise<WebResponse<DiseaseResponse>> {
     const disease = await this.diseaseService.getDiseaseById(diseaseId);
+
+    return {
+      data: disease,
+    };
+  }
+
+  // API to update disease by id
+  @Patch('/:diseaseId')
+  @Roles('admin')
+  @HttpCode(200)
+  async updateDisease(
+    @Param('diseaseId', ParseIntPipe) diseaseId: number,
+    @Body() request: DiseaseRequest,
+  ): Promise<WebResponse<DiseaseResponse>> {
+    const disease = await this.diseaseService.updateDiseaseById(
+      diseaseId,
+      request,
+    );
 
     return {
       data: disease,

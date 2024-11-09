@@ -83,7 +83,7 @@ describe('UserController', () => {
       expect(response.body).toBeDefined();
     });
 
-    it('should be able to create product', async () => {
+    it('should be able to create disease', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/diseases')
         .set('Authorization', `${authToken}`)
@@ -151,6 +151,99 @@ describe('UserController', () => {
       const response = await request(app.getHttpServer()).get(
         `/api/diseases/${diseaseId}`,
       );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.name).toBe('test');
+      expect(response.body.data.description).toBe('test');
+      expect(response.body.data.solution).toBe('test');
+    });
+  });
+
+  describe('PATCH /api/diseases/:diseaseId', () => {
+    beforeEach(async () => {
+      await testService.deleteDisease();
+      await testService.createDisease();
+
+      diseaseId = await testService.getDiseaseById();
+
+      // Perform login and get the auth token
+      const loginAdminResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authToken = loginAdminResponse.body.data.token;
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if not admin', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/diseases/${diseaseId}`)
+        .set('Authorization', `${authTokenMember}`)
+        .send({
+          name: 'test',
+          description: 'test',
+          solution: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and invalid request', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/diseases/${diseaseId}`)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: '',
+          description: '',
+          product_img: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and disease not found', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/diseases/999999`)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: 'test',
+          description: 'test',
+          product_img: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to update', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/diseases/${diseaseId}`)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: 'test',
+          description: 'test',
+          solution: 'test',
+        });
 
       logger.info(response.body);
 
