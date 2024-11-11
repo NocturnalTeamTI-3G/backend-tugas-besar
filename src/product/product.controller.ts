@@ -15,8 +15,6 @@ import { Roles } from '../common/roles.decorator';
 import { WebResponse } from '../model/web.model';
 import { ProductRequest, ProductResponse } from '../model/product.model';
 import { ProductService } from './product.service';
-import { Auth } from '../common/auth.decorator';
-import { request } from 'http';
 
 @Controller('/api/products')
 @UseGuards(RolesGuard)
@@ -29,7 +27,6 @@ export class ProductController {
   @HttpCode(200)
   async createProduct(
     @Body() request: ProductRequest,
-    @Auth() user: any,
   ): Promise<WebResponse<ProductResponse>> {
     const newProduct = await this.productService.createProduct(request);
 
