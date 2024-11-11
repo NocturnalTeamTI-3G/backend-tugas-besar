@@ -9,6 +9,7 @@ import {
   HistoryScanResponse,
 } from '../model/historyScan.model';
 import { HistoryScanValidation } from './historyScan.validation';
+import * as fs from 'fs';
 
 @Injectable()
 export class HistoryScanService {
@@ -87,13 +88,8 @@ export class HistoryScanService {
   }
 
   // Logic to delete history by id
-  async deleteHistoryScanById(user: User, historyId: number): Promise<boolean> {
+  async deleteHistoryScanById(historyId: number): Promise<boolean> {
     this.logger.info('HistoryScanService.deleteHistoryScanById');
-
-    // Check token
-    if (user.token === null) {
-      throw new HttpException('Unauthorized', 401);
-    }
 
     const history = await this.prismaService.historyScan.findUnique({
       where: { id: historyId },
@@ -101,6 +97,13 @@ export class HistoryScanService {
 
     if (!history) {
       throw new HttpException('History not found', 404);
+    }
+
+    if (
+      history.face_img &&
+      fs.existsSync(`./src/history_scan/image/${history.face_img}`)
+    ) {
+      fs.unlinkSync(`./src/history_scan/image/${history.face_img}`);
     }
 
     await this.prismaService.historyScan.delete({

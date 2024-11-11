@@ -76,13 +76,10 @@ export class HistoryScanController {
   @Delete('/:historyId')
   @HttpCode(200)
   async deleteHistoryScan(
-    @Auth() user: User,
     @Param('historyId', ParseIntPipe) historyId: number,
   ): Promise<WebResponse<boolean>> {
-    const deletedHistory = await this.historyScanService.deleteHistoryScanById(
-      user,
-      historyId,
-    );
+    const deletedHistory =
+      await this.historyScanService.deleteHistoryScanById(historyId);
 
     return {
       data: deletedHistory,
