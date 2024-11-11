@@ -5,6 +5,7 @@ import { RoleModule } from './role/role.module';
 import { ProductModule } from './product/product.module';
 import { DiseaseModule } from './disease/disease.module';
 import { HistoryScanModule } from './history_scan/historyScan.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { HistoryScanModule } from './history_scan/historyScan.module';
     ProductModule,
     DiseaseModule,
     HistoryScanModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [],
