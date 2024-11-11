@@ -1,6 +1,6 @@
 # Disease API Spec
 
-## Create Disease
+## Create Disease (done)
 Endpoint: POST /api/diseases
 
 Headers:
@@ -18,6 +18,7 @@ Request Body:
 Response Body (Success):
 ```json
 {
+    "id": 1,
     "name": "nama penyakit",
     "description": "deskripsi penyakit",
     "solution": "solusi penyakit"
@@ -27,16 +28,13 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
 
-## Get All Diseases
+## Get All Diseases (Done)
 Endpoint: GET /api/diseases
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json
@@ -58,19 +56,8 @@ Response Body (Success):
 }
 ```
 
-Response Body (Failed):
-```json
-{
-    "status": 404,
-    "message": "Unauthorized",
-}
-```
-
-## Search Disease
+## Search Disease (done)
 Endpoint: GET /api/diseases/:diseaseId
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json
@@ -86,11 +73,11 @@ Response Body (Failed):
 ```json
 {
     "status": 404,
-    "message": "Unauthorized",
+    "message": "Disease Not Found",
 }
 ```
 
-## Update Disease
+## Update Disease (done)
 Endpoint: PATCH /api/diseases/:diseaseId
 
 Headers:
@@ -110,18 +97,19 @@ Response Body (Success):
 {
     "name": "nama penyakit",
     "description": "deskripsi penyakit",
+    "solution": "solusi penyakit"
 }
 ```
 
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized",
 }
 ```
 
-## Delete Disease
+## Delete Disease (done)
 
 Endpoint: DELETE /api/diseases/:diseaseId
 
@@ -139,7 +127,7 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "status": 404,
+    "status": 401,
     "message": "Unauthorized"
 }
 ```

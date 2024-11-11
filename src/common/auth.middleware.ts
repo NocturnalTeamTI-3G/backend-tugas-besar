@@ -6,7 +6,12 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private prismaService: PrismaService) {}
 
   async use(req: any, res: any, next: (error?: Error | any) => void) {
-    const token = req.headers['authorization'] as string;
+    let token = req.headers['authorization'] as string;
+
+    // If the token is in the format 'Bearer <token>
+    // if (token.includes('Bearer ')) {
+    //   token = token.split(' ')[1];
+    // }
 
     if (token) {
       const user = await this.prismaService.user.findFirst({

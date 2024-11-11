@@ -4,6 +4,7 @@ export class RegisterUserRequest {
   password: string;
   role_id: number;
   profile_img: string;
+  gender: string;
 }
 
 export class UpdateUserRequest {
@@ -12,6 +13,7 @@ export class UpdateUserRequest {
   password: string;
   role_id: number;
   profile_img: string;
+  gender: string;
 }
 
 export class LoginUserRequest {
@@ -23,8 +25,9 @@ export class UserResponse {
   id: number;
   username: string;
   email: string;
+  gender: string;
   role_id: number;
-  profile_img: string;
+  profile_img?: string;
   created_at?: Date;
   token?: string;
 }

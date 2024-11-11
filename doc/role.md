@@ -3,9 +3,6 @@
 ## Create Role
 Endpoint: POST /api/roles
 
-Headers:
-- Authorization: token
-
 Request Body:
 ```json
 {
@@ -27,9 +24,6 @@ Response Body (Success):
 ## Get All Role
 Endpoint: GET /api/roles
 
-Headers:
-- Authorization: token
-
 Response Body (Success):
 ```json
 {
@@ -49,15 +43,12 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "error": "Unauthorized"
+    "error": "Role not found"
 }
 ```
 
 ## Find one Role
 Endpoint: GET /api/roles/:roleId
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json
@@ -72,15 +63,12 @@ Response Body (Success):
 Response Body (Failed):
 ```json
 {
-    "error": "Unauthorized"
+    "error": "Role not found"
 }
 ```
 
 ## Update Role
 Endpoint: PATCH /api/roles/:roleId
-
-Headers:
-- Authorization: token
 
 Request Body:
 ```json
@@ -102,14 +90,10 @@ Response Body (Success):
 ## Delete Role
 Endpoint: DELETE /api/roles/:roleId
 
-Headers:
-- Authorization: token
-
 Response Body (Success):
 ```json
 {
-    "status": 200,
-    "message": "Role has been deleted"
+    message: true
 }
 ```
 

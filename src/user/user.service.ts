@@ -25,6 +25,9 @@ export class UserService {
   // Logic to register a new user
   async register(request: RegisterUserRequest): Promise<UserResponse> {
     this.logger.debug(`Registering a new user: ${JSON.stringify(request)}`);
+
+    request.role_id = parseInt(request.role_id.toString());
+
     const registerRequest: RegisterUserRequest =
       this.validationService.validate(UserValidation.REGISTER, request);
 
@@ -50,6 +53,7 @@ export class UserService {
       id: newUser.id,
       username: newUser.username,
       email: newUser.email,
+      gender: newUser.gender,
       profile_img: newUser.profile_img,
       role_id: newUser.role_id,
       created_at: newUser.created_at,
@@ -99,6 +103,7 @@ export class UserService {
       id: user.id,
       username: user.username,
       email: user.email,
+      gender: user.gender,
       profile_img: user.profile_img,
       role_id: user.role_id,
       token: user.token,
@@ -112,6 +117,7 @@ export class UserService {
       role_id: user.role_id,
       username: user.username,
       email: user.email,
+      gender: user.gender,
       profile_img: user.profile_img,
     };
   }
@@ -146,6 +152,7 @@ export class UserService {
       id: updatedUser.id,
       username: updatedUser.username,
       email: updatedUser.email,
+      gender: updatedUser.gender,
       profile_img: updatedUser.profile_img,
       role_id: updatedUser.role_id,
     };
@@ -169,6 +176,7 @@ export class UserService {
       id: result.id,
       username: result.username,
       email: result.email,
+      gender: result.gender,
       profile_img: result.profile_img,
       role_id: result.role_id,
     };

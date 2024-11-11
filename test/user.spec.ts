@@ -37,6 +37,7 @@ describe('UserController', () => {
           password: '',
           email: '',
           profile_img: '',
+          gender: '',
           role_id: '',
         });
 
@@ -53,6 +54,7 @@ describe('UserController', () => {
           username: 'test',
           password: 'testtest',
           email: 'test@gmail.com',
+          gender: 'test',
           profile_img: 'test.jpg',
           role_id: 1,
         });
@@ -63,6 +65,7 @@ describe('UserController', () => {
       expect(response.body.data.username).toBe('test');
       expect(response.body.data.email).toBe('test@gmail.com');
       expect(response.body.data.profile_img).toBe('test.jpg');
+      expect(response.body.data.gender).toBe('test');
       expect(response.body.data.role_id).toBe(1);
     });
 
@@ -74,6 +77,7 @@ describe('UserController', () => {
           username: 'test',
           password: 'testtest',
           email: 'test@gmail.com',
+          gender: 'test',
           profile_img: 'test.jpg',
           role_id: 1,
         });
@@ -118,6 +122,7 @@ describe('UserController', () => {
       expect(response.status).toBe(200);
       expect(response.body.data.username).toBe('test');
       expect(response.body.data.email).toBe('test@gmail.com');
+      expect(response.body.data.gender).toBe('test');
       expect(response.body.data.profile_img).toBe('test.jpg');
       expect(response.body.data.role_id).toBe(1);
       expect(response.body.data.token).toBeDefined();
@@ -151,6 +156,7 @@ describe('UserController', () => {
       expect(response.status).toBe(200);
       expect(response.body.data.username).toBe('test');
       expect(response.body.data.email).toBe('test@gmail.com');
+      expect(response.body.data.gender).toBe('test');
       expect(response.body.data.profile_img).toBe('test.jpg');
       expect(response.body.data.role_id).toBe(1);
     });

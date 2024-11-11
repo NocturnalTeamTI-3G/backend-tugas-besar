@@ -10,7 +10,8 @@ Request Body:
 ``` json
 {
     "name": "x product",
-    "description": "vitamin b99..."
+    "description": "vitamin b99...",
+    "product_img": "example.jpg"
 }
 ```
 
@@ -18,15 +19,13 @@ Response Body (Success):
 ```json
 {
     "name": "x product",
-    "description": "vitamin b99..."
+    "description": "vitamin b99...",
+    "product_img": "example.jpg"
 }
 ```
 
 ## Get Product
 Endpoint: GET /api/products
-
-Headers:
-- Authorization: token
 
 Response Body (Success):
 ```json
@@ -35,12 +34,14 @@ Response Body (Success):
         {
             "productId": 1,
             "name": "x product",
-            "description": "vitamin b99..."
+            "description": "vitamin b99...",
+            "product_img": "example.jpg"
         },
         {
             "productId": 2,
             "name": "x product",
-            "description": "vitamin b99..."
+            "description": "vitamin b99...",
+            "product_img": "example.jpg"
         }
     ]
 }
@@ -49,16 +50,14 @@ Response Body (Success):
 ## Find one product
 Endpoint: GET /api/products/:productId
 
-Headers: 
-- Authorization: token
-
 Response Body (Success):
 ```json
 {
     "data": {
         "productId": 1,
         "name": "x product",
-        "description": "vitamin b99..."
+        "description": "vitamin b99...",
+        "product_img": "example.jpg"
     }
 }
 ```
@@ -73,7 +72,8 @@ Request Body:
 ``` json
 {
     "name": "x product", // optional
-    "description": "vitamin b99..." // optional
+    "description": "vitamin b99...", // optional
+    "product_img": "example.jpg" // optional
 }
 ```
 
@@ -81,7 +81,8 @@ Response Body (Success):
 ```json
 {
     "name": "x product",
-    "description": "vitamin b99..."
+    "description": "vitamin b99...",
+    "product_img": "example.jpg"
 }
 ```
 
@@ -102,8 +103,7 @@ Headers:
 Response Body (Success):
 ```json
 {
-    "status": 200,
-    "message": "Product has been deleted."
+    "message": true
 }
 ```
 
