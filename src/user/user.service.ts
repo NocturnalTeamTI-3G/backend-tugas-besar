@@ -13,6 +13,7 @@ import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { User } from '@prisma/client';
+import * as fs from 'fs';
 
 @Injectable()
 export class UserService {
@@ -126,6 +127,7 @@ export class UserService {
   async updateCurrentUser(
     user: User,
     request: RegisterUserRequest,
+    file: Express.Multer.File,
   ): Promise<UserResponse> {
     this.logger.debug(
       `UserService.updateUserCurrent: ${JSON.stringify(request)}`,
@@ -138,6 +140,21 @@ export class UserService {
     if (updateUser.password) {
       // Convert password to bcrypt
       updateUser.password = await bcrypt.hash(updateUser.password, 10);
+    }
+
+    // if statement to check file image was uploaded
+    if (file) {
+      // to remove current user profile image
+      if (
+        user.profile_img &&
+        fs.existsSync(`./src/user/image/${user.profile_img}`)
+      ) {
+        const filePath = `./src/user/image/${user.profile_img}`;
+        fs.unlinkSync(filePath);
+      }
+
+      // update profile image
+      updateUser.profile_img = file.filename;
     }
 
     // Update user
