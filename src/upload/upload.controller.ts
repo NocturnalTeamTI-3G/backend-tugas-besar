@@ -1,34 +1,29 @@
 import {
   Controller,
-  Post,
-  UploadedFile,
-  UseInterceptors,
+  Get,
+  HttpCode,
+  HttpException,
+  Param,
+  Res,
 } from '@nestjs/common';
-import { UploadService } from './upload.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
-@Controller('/api/upload')
+@Controller('/api/image')
 export class UploadController {
-  constructor(private uploadService: UploadService) {}
+  @Get('/:folder/:filename')
+  @HttpCode(200)
+  async getImage(
+    @Param('folder') folder: string,
+    @Param('filename') filename: string,
+    @Res() res: any,
+  ) {
+    const filePath = resolve(`src/${folder}/image/${filename}`);
 
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './src/upload/image',
-        filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const fileExtName = extname(file.originalname);
-          const fileName = `${file.fieldname}-${uniqueSuffix}${fileExtName}`;
-          cb(null, fileName);
-        },
-      }),
-    }),
-  )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.uploadService.uploadFile(file);
+    if (!existsSync(filePath)) {
+      throw new HttpException('File not found', 404);
+    }
+
+    return res.sendFile(filePath);
   }
 }
