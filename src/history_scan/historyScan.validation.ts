@@ -4,7 +4,6 @@ export class HistoryScanValidation {
   static readonly CREATE: ZodType = z.object({
     diseaseId: z.number(),
     productId: z.number(),
-    face_img: z.string(),
   });
 
   static readonly UPDATE: ZodType = z.object({

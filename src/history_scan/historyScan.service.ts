@@ -22,8 +22,15 @@ export class HistoryScanService {
   async createHistoryScan(
     user: User,
     request: HistoryScanRequest,
+    file_img: Express.Multer.File,
   ): Promise<HistoryScanResponse> {
     this.logger.info('HistoryScanService.createHistoryScan');
+
+    // Convert string values to numbers
+    request.diseaseId = parseInt(request.diseaseId as any, 10);
+    request.productId = parseInt(request.productId as any, 10);
+
+    console.log(request);
     const historyScanRequest: HistoryScanRequest =
       this.validationService.validate(HistoryScanValidation.CREATE, request);
 
@@ -32,7 +39,7 @@ export class HistoryScanService {
         user: { connect: { id: user.id } },
         disease: { connect: { id: historyScanRequest.diseaseId } },
         product: { connect: { id: historyScanRequest.productId } },
-        face_img: historyScanRequest.face_img,
+        face_img: file_img.filename,
       },
       include: {
         disease: true,

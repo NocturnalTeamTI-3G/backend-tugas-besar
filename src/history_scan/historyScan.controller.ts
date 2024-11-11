@@ -7,6 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { HistoryScanService } from './historyScan.service';
 import { Auth } from '../common/auth.decorator';
@@ -16,6 +18,9 @@ import {
 } from '../model/historyScan.model';
 import { User } from '@prisma/client';
 import { WebResponse } from 'src/model/web.model';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('/api/histories')
 export class HistoryScanController {
@@ -24,13 +29,29 @@ export class HistoryScanController {
   // API to create a new history
   @Post()
   @HttpCode(200)
+  @UseInterceptors(
+    FileInterceptor('face_img', {
+      storage: diskStorage({
+        destination: './src/history_scan/image',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExtName = extname(file.originalname);
+          const filename = file.fieldname + '-' + uniqueSuffix + fileExtName;
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
   async createHistoryScan(
     @Auth() user: User,
+    @UploadedFile() face_img: Express.Multer.File,
     @Body() request: HistoryScanRequest,
   ) {
     const historyScan = await this.historyScanService.createHistoryScan(
       user,
       request,
+      face_img,
     );
 
     return {
