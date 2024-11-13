@@ -53,8 +53,10 @@ model User {
 // Model Products
 model Product {
   id          Int      @id @default(autoincrement())
+  category_id Int
   name        String   @db.VarChar(255)
   description String   @db.Text
+  nutrition   String   @db.Text
   product_img String   @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
@@ -62,8 +64,23 @@ model Product {
   // History Product Relation
   historyScan historyScan[]
 
+  // Product Category Relation
+  category CategoryProduct @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
   // Table name
   @@map("products")
+}
+
+model CategoryProduct {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Product Category Relation
+  products Product[]
+
+  @@map("category_products")
 }
 
 model disease {

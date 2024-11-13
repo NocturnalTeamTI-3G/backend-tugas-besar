@@ -57,6 +57,7 @@ export class HistoryScanService {
       product: historyScan.product.name,
       description_product: historyScan.product.description,
       face_img: historyScan.face_img,
+      created_at: historyScan.created_at,
     };
   }
 
@@ -84,6 +85,7 @@ export class HistoryScanService {
       product: history.product.name,
       description_product: history.product.description,
       face_img: history.face_img,
+      created_at: history.created_at,
     }));
   }
 

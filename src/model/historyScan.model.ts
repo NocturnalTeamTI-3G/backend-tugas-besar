@@ -13,4 +13,5 @@ export class HistoryScanResponse {
   product: string;
   description_product: string;
   face_img: string;
+  created_at: Date;
 }
