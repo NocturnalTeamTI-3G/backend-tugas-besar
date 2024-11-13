@@ -62,6 +62,7 @@ describe('UserController', () => {
           category_id: 1,
           nutrition: 'test',
           product_img: 'test.jpg',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -80,6 +81,7 @@ describe('UserController', () => {
           product_img: '',
           category_id: NaN,
           nutrition: '',
+          link_product: '',
         });
 
       logger.info(response.body);
@@ -98,6 +100,7 @@ describe('UserController', () => {
           product_img: 'test.jpg',
           category_id: 1,
           nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -186,6 +189,7 @@ describe('UserController', () => {
           product_img: 'test.jpg',
           category_id: 1,
           nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -210,7 +214,7 @@ describe('UserController', () => {
       expect(response.body).toBeDefined();
     });
 
-    it('should be able to create product', async () => {
+    it('should be able to update product', async () => {
       const response = await request(app.getHttpServer())
         .patch(`/api/products/1`)
         .set('Authorization', `${authToken}`)
@@ -220,6 +224,7 @@ describe('UserController', () => {
           product_img: 'test.jpg',
           category_id: 1,
           nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -261,6 +266,7 @@ describe('UserController', () => {
           product_img: 'test.jpg',
           category_id: 1,
           nutrition: 'test',
+          link_product: 'test',
         });
 
       product_id = product.body.data.id;

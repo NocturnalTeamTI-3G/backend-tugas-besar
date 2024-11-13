@@ -32,6 +32,7 @@ export class ProductService {
         category_id: product.category_id,
         nutrition: product.nutrition,
         product_img: product.product_img,
+        link_product: product.link_product,
       },
     });
 
@@ -42,6 +43,7 @@ export class ProductService {
       nutrition: createdProduct.nutrition,
       description: createdProduct.description,
       product_img: createdProduct.product_img,
+      link_product: createdProduct.link_product,
     };
   }
 
@@ -62,6 +64,7 @@ export class ProductService {
       nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
+      link_product: product.link_product,
     }));
   }
 
@@ -89,6 +92,7 @@ export class ProductService {
       nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
+      link_product: product.link_product,
     };
   }
 
@@ -133,6 +137,7 @@ export class ProductService {
       nutrition: updatedProduct.nutrition,
       description: updatedProduct.description,
       product_img: updatedProduct.product_img,
+      link_product: updatedProduct.link_product,
     };
   }
 
@@ -165,6 +170,7 @@ export class ProductService {
       nutrition: existingProduct.nutrition,
       description: existingProduct.description,
       product_img: existingProduct.product_img,
+      link_product: existingProduct.link_product,
     };
   }
 }

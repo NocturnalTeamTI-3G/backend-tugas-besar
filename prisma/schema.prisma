@@ -52,14 +52,15 @@ model User {
 
 // Model Products
 model Product {
-  id          Int      @id @default(autoincrement())
-  category_id Int
-  name        String   @db.VarChar(255)
-  description String   @db.Text
-  nutrition   String   @db.Text
-  product_img String   @db.Text
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  category_id  Int
+  name         String   @db.VarChar(255)
+  link_product String   @db.Text
+  description  String   @db.Text
+  nutrition    String   @db.Text
+  product_img  String   @db.Text
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   // History Product Relation
   historyScan historyScan[]
@@ -72,8 +73,8 @@ model Product {
 }
 
 model CategoryProduct {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(50)
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

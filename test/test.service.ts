@@ -52,6 +52,7 @@ export class TestService {
         nutrition: 'test',
         description: 'test',
         product_img: 'test.jpg',
+        link_product: 'test',
       },
     });
   }
