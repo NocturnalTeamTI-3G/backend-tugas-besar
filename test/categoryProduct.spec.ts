@@ -13,6 +13,7 @@ describe('UserController', () => {
   let testService: TestService;
   let authToken: string;
   let authTokenMember: string;
+  let category_id: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -85,6 +86,55 @@ describe('UserController', () => {
         .send({
           name: 'test',
         });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('GET /api/category-products', () => {
+    beforeEach(async () => {
+      await testService.createCategoryProduct();
+      await testService.deleteCategoryProduct();
+    });
+
+    it('should be able to get all category product', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-products',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('GET /api/category-products/:productId', () => {
+    beforeEach(async () => {
+      await testService.deleteCategoryProduct();
+      await testService.createCategoryProduct();
+
+      category_id = await testService.getCategoryProductId();
+    });
+
+    it('should be rejected if category product not found', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-products/999999',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to get category product by id', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-products/' + category_id,
+      );
 
       logger.info(response.body);
 

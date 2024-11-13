@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { ValidationService } from '../common/validation.service';
 import { PrismaService } from '../common/prisma.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -41,4 +41,49 @@ export class CategoryProductService {
       name: newCategoryProduct.name,
     };
   }
+
+  // Logic to get all category products
+  async getCategoryProducts(): Promise<CategoryProductResponse[]> {
+    this.logger.info('CategoryProductService.getCategoryProducts');
+
+    const categoryProducts =
+      await this.prismaService.categoryProduct.findMany();
+
+    if (!categoryProducts) {
+      throw new HttpException('Category products not found', 404);
+    }
+
+    return categoryProducts.map((categoryProduct) => {
+      return {
+        id: categoryProduct.id,
+        name: categoryProduct.name,
+      };
+    });
+  }
+
+  // Logic to get category product by id
+  async getCategoryProductById(id: number): Promise<CategoryProductResponse> {
+    this.logger.info('CategoryProductService.getCategoryProductById');
+
+    const categoryProduct = await this.prismaService.categoryProduct.findUnique(
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+
+    if (!categoryProduct) {
+      throw new HttpException('Category product not found', 404);
+    }
+
+    return {
+      id: categoryProduct.id,
+      name: categoryProduct.name,
+    };
+  }
+
+  // Logic to update category product
+
+  // Logic to delete category product
 }

@@ -67,7 +67,6 @@ export class TestService {
   async createCategoryProduct() {
     await this.prismaService.categoryProduct.create({
       data: {
-        id: 1,
         name: 'test',
       },
     });
@@ -79,6 +78,16 @@ export class TestService {
         name: 'test',
       },
     });
+  }
+
+  async getCategoryProductId(): Promise<number> {
+    const categoryProduct = await this.prismaService.categoryProduct.findFirst({
+      where: {
+        name: 'test',
+      },
+    });
+
+    return categoryProduct.id;
   }
 
   async createDisease() {
