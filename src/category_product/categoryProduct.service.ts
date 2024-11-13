@@ -126,4 +126,28 @@ export class CategoryProductService {
   }
 
   // Logic to delete category product
+  async deleteCategoryProductById(id: number): Promise<boolean> {
+    this.logger.info('CategoryProductService.deleteCategoryProductById');
+
+    const categoryProduct = await this.prismaService.categoryProduct.findUnique(
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+
+    if (!categoryProduct) {
+      throw new HttpException('Category product not found', 404);
+    }
+
+    // Delete category product
+    await this.prismaService.categoryProduct.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return true;
+  }
 }

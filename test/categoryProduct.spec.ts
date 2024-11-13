@@ -112,7 +112,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('GET /api/category-products/:productId', () => {
+  describe('GET /api/category-products/:categorytId', () => {
     beforeEach(async () => {
       await testService.deleteCategoryProduct();
       await testService.createCategoryProduct();
@@ -143,7 +143,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('PATCH /api/category-products', () => {
+  describe('PATCH /api/category-products/:categorytId', () => {
     beforeEach(async () => {
       await testService.deleteCategoryProduct();
       await testService.createCategoryProduct();
@@ -218,6 +218,66 @@ describe('UserController', () => {
         .send({
           name: 'test',
         });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('DELETE /api/category-products/:categoryId', () => {
+    beforeEach(async () => {
+      await testService.deleteCategoryProduct();
+      await testService.createCategoryProduct();
+
+      category_id = await testService.getCategoryProductId();
+
+      // Perform login and get the auth token
+      const loginAdminResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authToken = loginAdminResponse.body.data.token;
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if not admin', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/api/category-products/' + category_id)
+        .set('Authorization', `${authTokenMember}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and invalid id', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/api/category-products/999999')
+        .set('Authorization', `${authToken}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to delete category product', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/api/category-products/' + category_id)
+        .set('Authorization', `${authToken}`);
 
       logger.info(response.body);
 

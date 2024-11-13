@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -86,4 +87,17 @@ export class CategoryProductController {
   }
 
   // API to delete category product by id
+  @Delete('/:categoryId')
+  @HttpCode(200)
+  @Roles('admin')
+  async deleteCategoryProductById(
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ): Promise<WebResponse<boolean>> {
+    const response =
+      await this.productCategoryService.deleteCategoryProductById(categoryId);
+
+    return {
+      data: response,
+    };
+  }
 }
