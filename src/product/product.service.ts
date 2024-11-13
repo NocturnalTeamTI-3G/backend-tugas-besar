@@ -29,13 +29,17 @@ export class ProductService {
       data: {
         name: product.name,
         description: product.description,
+        category_id: product.category_id,
+        nutrition: product.nutrition,
         product_img: product.product_img,
       },
     });
 
     return {
       id: createdProduct.id,
+      category_id: createdProduct.category_id,
       name: createdProduct.name,
+      nutrition: createdProduct.nutrition,
       description: createdProduct.description,
       product_img: createdProduct.product_img,
     };
@@ -45,11 +49,17 @@ export class ProductService {
   async getAllProducts(): Promise<ProductResponse[]> {
     this.logger.info('ProductService.getAllProducts');
 
-    const products = await this.prismaService.product.findMany();
+    const products = await this.prismaService.product.findMany({
+      include: {
+        category: true,
+      },
+    });
 
     return products.map((product) => ({
       id: product.id,
       name: product.name,
+      category_name: product.category.name,
+      nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
     }));
@@ -63,6 +73,9 @@ export class ProductService {
       where: {
         id: productId,
       },
+      include: {
+        category: true,
+      },
     });
 
     if (!product) {
@@ -72,6 +85,8 @@ export class ProductService {
     return {
       id: product.id,
       name: product.name,
+      category_name: product.category.name,
+      nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
     };
@@ -113,7 +128,9 @@ export class ProductService {
 
     return {
       id: updatedProduct.id,
+      category_id: updatedProduct.category_id,
       name: updatedProduct.name,
+      nutrition: updatedProduct.nutrition,
       description: updatedProduct.description,
       product_img: updatedProduct.product_img,
     };
@@ -144,6 +161,8 @@ export class ProductService {
     return {
       id: existingProduct.id,
       name: existingProduct.name,
+      category_id: existingProduct.category_id,
+      nutrition: existingProduct.nutrition,
       description: existingProduct.description,
       product_img: existingProduct.product_img,
     };

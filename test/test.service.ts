@@ -48,6 +48,8 @@ export class TestService {
     await this.prismaService.product.create({
       data: {
         name: 'test',
+        category_id: 1,
+        nutrition: 'test',
         description: 'test',
         product_img: 'test.jpg',
       },
