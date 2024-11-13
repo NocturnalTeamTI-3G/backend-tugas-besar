@@ -84,6 +84,46 @@ export class CategoryProductService {
   }
 
   // Logic to update category product
+  async updateCategoryProductById(
+    id: number,
+    request: CategoryProductRequest,
+  ): Promise<CategoryProductResponse> {
+    this.logger.info('CategoryProductService.updateCategoryProductById');
+
+    const category: CategoryProductRequest =
+      await this.validationService.validate(
+        CategoryProductValidation.UPDATE,
+        request,
+      );
+
+    const categoryProduct = await this.prismaService.categoryProduct.findUnique(
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+
+    if (!categoryProduct) {
+      throw new HttpException('Category product not found', 404);
+    }
+
+    // Update category product
+    const updatedCategoryProduct =
+      await this.prismaService.categoryProduct.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: category.name,
+        },
+      });
+
+    return {
+      id: updatedCategoryProduct.id,
+      name: updatedCategoryProduct.name,
+    };
+  }
 
   // Logic to delete category product
 }

@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -66,6 +67,23 @@ export class CategoryProductController {
   }
 
   // API to update category product by id
+  @Patch('/:categoryId')
+  @HttpCode(200)
+  @Roles('admin')
+  async updateCategoryProductById(
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Body() request: CategoryProductRequest,
+  ): Promise<WebResponse<CategoryProductResponse>> {
+    const categoryProduct =
+      await this.productCategoryService.updateCategoryProductById(
+        categoryId,
+        request,
+      );
+
+    return {
+      data: categoryProduct,
+    };
+  }
 
   // API to delete category product by id
 }
