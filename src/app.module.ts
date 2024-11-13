@@ -6,6 +6,7 @@ import { ProductModule } from './product/product.module';
 import { DiseaseModule } from './disease/disease.module';
 import { HistoryScanModule } from './history_scan/historyScan.module';
 import { UploadModule } from './upload/upload.module';
+import { CategoryProductModule } from './category_product/categoryProduct.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UploadModule } from './upload/upload.module';
     DiseaseModule,
     HistoryScanModule,
     UploadModule,
+    CategoryProductModule,
   ],
   controllers: [],
   providers: [],

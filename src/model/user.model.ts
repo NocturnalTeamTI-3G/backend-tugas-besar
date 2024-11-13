@@ -3,7 +3,7 @@ export class RegisterUserRequest {
   email: string;
   password: string;
   role_id: number;
-  profile_img: string;
+  profile_img?: string;
   gender: string;
 }
 
