@@ -28,8 +28,8 @@ describe('UserController', () => {
 
   describe('POST /api/histories', () => {
     beforeEach(async () => {
-      await testService.createHistoryScan();
       await testService.deleteHistoryScan();
+      await testService.createHistoryScan();
 
       const loginMemberResponse = await request(app.getHttpServer())
         .post('/api/users/login')
@@ -47,7 +47,7 @@ describe('UserController', () => {
         .set('Authorization', `wrong`)
         .send({
           diseaseId: 1,
-          productId: 1,
+          categoryProduct_id: 1,
           face_img: 'test.jpg',
         });
 
@@ -63,7 +63,7 @@ describe('UserController', () => {
         .set('Authorization', `${authTokenMember}`)
         .send({
           diseaseId: NaN,
-          productId: NaN,
+          categoryProduct_id: NaN,
           face_img: '',
         });
 
@@ -79,7 +79,7 @@ describe('UserController', () => {
         .set('Authorization', `${authTokenMember}`)
         .send({
           diseaseId: 1,
-          productId: 1,
+          categoryProductId: 1,
           face_img: 'test.jpg',
         });
 
@@ -116,7 +116,7 @@ describe('UserController', () => {
       expect(response.body).toBeDefined();
     });
 
-    it('should be able to create history', async () => {
+    it('should be able to get all history', async () => {
       const response = await request(app.getHttpServer())
         .get('/api/histories')
         .set('Authorization', `${authTokenMember}`);

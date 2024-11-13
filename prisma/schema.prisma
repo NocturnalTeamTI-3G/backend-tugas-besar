@@ -62,9 +62,6 @@ model Product {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  // History Product Relation
-  historyScan historyScan[]
-
   // Product Category Relation
   category CategoryProduct @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
@@ -80,6 +77,9 @@ model CategoryProduct {
 
   // Product Category Relation
   products Product[]
+
+  // History Product Relation
+  historyScan historyScan[]
 
   @@map("category_products")
 }
@@ -103,7 +103,7 @@ model historyScan {
   id         Int      @id @default(autoincrement())
   user_id    Int
   disease_id Int
-  product_id Int
+  categoryProduct_id Int
   face_img   String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -115,7 +115,7 @@ model historyScan {
   disease disease @relation(fields: [disease_id], references: [id], onDelete: Cascade)
 
   // Product History Relation
-  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  category_products CategoryProduct @relation(fields: [categoryProduct_id], references: [id], onDelete: Cascade)
 
   // Table name
   @@map("history_scans")

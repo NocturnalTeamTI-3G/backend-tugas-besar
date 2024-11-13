@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { HistoryScanService } from './historyScan.service';
@@ -17,12 +18,15 @@ import {
   HistoryScanResponse,
 } from '../model/historyScan.model';
 import { User } from '@prisma/client';
-import { WebResponse } from 'src/model/web.model';
+import { WebResponse } from '../model/web.model';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { RolesGuard } from '../common/roles.guard';
+import { Roles } from '../common/roles.decorator';
 
 @Controller('/api/histories')
+@UseGuards(RolesGuard)
 export class HistoryScanController {
   constructor(private historyScanService: HistoryScanService) {}
 
@@ -62,6 +66,7 @@ export class HistoryScanController {
   // API to get all history
   @Get()
   @HttpCode(200)
+  @Roles('member')
   async getAllHistories(
     @Auth() user: User,
   ): Promise<WebResponse<HistoryScanResponse[]>> {
@@ -75,6 +80,7 @@ export class HistoryScanController {
   // API to delete history by id
   @Delete('/:historyId')
   @HttpCode(200)
+  @Roles('member')
   async deleteHistoryScan(
     @Param('historyId', ParseIntPipe) historyId: number,
   ): Promise<WebResponse<boolean>> {

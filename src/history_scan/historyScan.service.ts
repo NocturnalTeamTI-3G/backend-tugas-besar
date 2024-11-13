@@ -29,7 +29,7 @@ export class HistoryScanService {
 
     // Convert string values to numbers
     request.diseaseId = parseInt(request.diseaseId as any, 10);
-    request.productId = parseInt(request.productId as any, 10);
+    request.categoryProductId = parseInt(request.categoryProductId as any, 10);
 
     console.log(request);
     const historyScanRequest: HistoryScanRequest =
@@ -39,13 +39,20 @@ export class HistoryScanService {
       data: {
         user: { connect: { id: user.id } },
         disease: { connect: { id: historyScanRequest.diseaseId } },
-        product: { connect: { id: historyScanRequest.productId } },
+        category_products: {
+          connect: { id: historyScanRequest.categoryProductId },
+        },
         face_img: file_img.filename,
       },
       include: {
         disease: true,
-        product: true,
+        category_products: true,
       },
+    });
+
+    // get all products from id category
+    const products = await this.prismaService.product.findMany({
+      where: { category_id: historyScanRequest.categoryProductId },
     });
 
     return {
@@ -54,8 +61,14 @@ export class HistoryScanService {
       disease: historyScan.disease.name,
       description_disease: historyScan.disease.description,
       solution_disease: historyScan.disease.solution,
-      product: historyScan.product.name,
-      description_product: historyScan.product.description,
+      products: products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        nutrition: product.nutrition,
+        product_img: product.product_img,
+        link_product: product.link_product,
+      })),
       face_img: historyScan.face_img,
       created_at: historyScan.created_at,
     };
@@ -68,7 +81,11 @@ export class HistoryScanService {
       where: { user_id: user.id },
       include: {
         disease: true,
-        product: true,
+        category_products: {
+          include: {
+            products: true,
+          },
+        },
       },
     });
 
@@ -76,14 +93,22 @@ export class HistoryScanService {
       throw new HttpException('Histories was empty', 404);
     }
 
+    // get all products from id category
+
     return histories.map((history) => ({
       id: history.id,
       userId: history.user_id,
       disease: history.disease.name,
       description_disease: history.disease.description,
       solution_disease: history.disease.solution,
-      product: history.product.name,
-      description_product: history.product.description,
+      products: history.category_products.products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        nutrition: product.nutrition,
+        product_img: product.product_img,
+        link_product: product.link_product,
+      })),
       face_img: history.face_img,
       created_at: history.created_at,
     }));

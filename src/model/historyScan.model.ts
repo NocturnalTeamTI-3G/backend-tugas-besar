@@ -1,7 +1,9 @@
+import { ProductResponse } from './product.model';
+
 export class HistoryScanRequest {
   diseaseId: number;
-  productId: number;
-  face_img: string;
+  categoryProductId: number;
+  face_img?: string;
 }
 
 export class HistoryScanResponse {
@@ -10,8 +12,7 @@ export class HistoryScanResponse {
   disease: string;
   description_disease: string;
   solution_disease: string;
-  product: string;
-  description_product: string;
+  products: ProductResponse[];
   face_img: string;
   created_at: Date;
 }

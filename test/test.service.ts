@@ -123,9 +123,9 @@ export class TestService {
   async createHistoryScan() {
     await this.prismaService.historyScan.create({
       data: {
-        user_id: 328,
+        user_id: 1,
         disease_id: 1,
-        product_id: 1,
+        categoryProduct_id: 1,
         face_img: 'test.jpg',
       },
     });
