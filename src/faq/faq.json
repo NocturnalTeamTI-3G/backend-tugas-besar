@@ -1,0 +1,22 @@
+[
+    {
+        "question": "What is the best way to contact you?",
+        "answer": "You can contact us by email at"
+    },
+    {
+        "question": "How do I return an item?",
+        "answer": "You can return an item by contacting us at"
+    },
+    {
+        "question": "Do you offer gift cards?",
+        "answer": "Yes, we offer gift cards. You can purchase them"
+    },
+    {
+        "question": "How do I track my order?",
+        "answer": "You can track your order by logging into your account"
+    },
+    {
+        "question": "Do you offer international shipping?",
+        "answer": "Yes, we offer international shipping. You can find more information"
+    }
+]
