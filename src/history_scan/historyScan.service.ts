@@ -114,6 +114,45 @@ export class HistoryScanService {
     }));
   }
 
+  // Logic to get history by id
+  async getHistoryScanById(historyId: number): Promise<HistoryScanResponse> {
+    this.logger.info('HistoryScanService.getHistoryScanById');
+
+    const history = await this.prismaService.historyScan.findUnique({
+      where: { id: historyId },
+      include: {
+        disease: true,
+        category_products: {
+          include: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    if (!history) {
+      throw new HttpException('History not found', 404);
+    }
+
+    return {
+      id: history.id,
+      userId: history.user_id,
+      disease: history.disease.name,
+      description_disease: history.disease.description,
+      solution_disease: history.disease.solution,
+      products: history.category_products.products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        nutrition: product.nutrition,
+        product_img: product.product_img,
+        link_product: product.link_product,
+      })),
+      face_img: history.face_img,
+      created_at: history.created_at,
+    };
+  }
+
   // Logic to delete history by id
   async deleteHistoryScanById(historyId: number): Promise<boolean> {
     this.logger.info('HistoryScanService.deleteHistoryScanById');

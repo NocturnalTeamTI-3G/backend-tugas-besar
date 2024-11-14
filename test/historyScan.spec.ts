@@ -128,6 +128,46 @@ describe('UserController', () => {
     });
   });
 
+  describe('GET /api/histories', () => {
+    beforeEach(async () => {
+      await testService.deleteHistoryScan();
+      await testService.createHistoryScan();
+
+      historyId = await testService.getHistoryScanId();
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if dont have token', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/histories')
+        .set('Authorization', '');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to get history by id', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/histories/' + historyId)
+        .set('Authorization', `${authTokenMember}`);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
   describe('DELETE /api/histories/:historyId', () => {
     beforeEach(async () => {
       await testService.deleteHistoryScan();

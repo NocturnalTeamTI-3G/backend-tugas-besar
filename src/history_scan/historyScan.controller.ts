@@ -77,6 +77,20 @@ export class HistoryScanController {
     };
   }
 
+  // API to get history by id
+  @Get('/:historyId')
+  @HttpCode(200)
+  @Roles('member')
+  async getHistoryScan(
+    @Param('historyId', ParseIntPipe) historyId: number,
+  ): Promise<WebResponse<HistoryScanResponse>> {
+    const history = await this.historyScanService.getHistoryScanById(historyId);
+
+    return {
+      data: history,
+    };
+  }
+
   // API to delete history by id
   @Delete('/:historyId')
   @HttpCode(200)
