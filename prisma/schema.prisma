@@ -46,6 +46,9 @@ model User {
   // History User Relation
   historyScan historyScan[]
 
+  // Post User Relation
+  posts Post[]
+
   // Table name
   @@map("users")
 }
@@ -90,8 +93,31 @@ model CategoryPost {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  // Post Category Relation
+  posts Post[]
+
   // Table name
   @@map("category_posts")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  user_id    Int
+  category_id Int
+  title      String   @db.VarChar(255)
+  content    String   @db.Text
+  post_img   String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // User Post Relation
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Category Post Relation
+  category CategoryPost @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  // Table name
+  @@map("posts")
 }
 
 model disease {
