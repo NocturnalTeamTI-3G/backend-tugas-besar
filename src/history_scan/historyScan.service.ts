@@ -10,6 +10,10 @@ import {
 } from '../model/historyScan.model';
 import { HistoryScanValidation } from './historyScan.validation';
 import * as fs from 'fs';
+import * as FormData from 'form-data';
+import { lastValueFrom } from 'rxjs';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class HistoryScanService {
@@ -17,6 +21,8 @@ export class HistoryScanService {
     private prismaService: PrismaService,
     private validationService: ValidationService,
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
+    private httpService: HttpService,
+    private configService: ConfigService,
   ) {}
 
   // Logic to create a new history
@@ -31,14 +37,32 @@ export class HistoryScanService {
     request.diseaseId = parseInt(request.diseaseId as any, 10);
     request.categoryProductId = parseInt(request.categoryProductId as any, 10);
 
-    console.log(request);
     const historyScanRequest: HistoryScanRequest =
       this.validationService.validate(HistoryScanValidation.CREATE, request);
+
+    // Get disease from api python
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(file_img.path));
+
+    const apiUrl = this.configService.get('PYTHON_API');
+
+    const response = await lastValueFrom(
+      this.httpService.post(apiUrl, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      }),
+    );
+
+    // Find disease by name from response api python
+    const disease = await this.prismaService.disease.findFirst({
+      where: { name: response.data.predict },
+    });
 
     const historyScan = await this.prismaService.historyScan.create({
       data: {
         user: { connect: { id: user.id } },
-        disease: { connect: { id: historyScanRequest.diseaseId } },
+        disease: { connect: { id: disease.id } },
         category_products: {
           connect: { id: historyScanRequest.categoryProductId },
         },
