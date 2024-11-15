@@ -42,4 +42,19 @@ export class CategoryPostService {
       created_at: newCategoryPost.created_at,
     };
   }
+
+  // Logic to get all category posts
+  async getAllCategoryPost(): Promise<CategoryPostResponse[]> {
+    this.logger.info('CategoryPostService.getAllCategoryPost');
+
+    // Get all category posts
+    const categoryPosts = await this.prismaService.categoryPost.findMany();
+
+    return categoryPosts.map((categoryPost) => {
+      return {
+        id: categoryPost.id,
+        name: categoryPost.name,
+      };
+    });
+  }
 }

@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CategoryPostService } from './categoryPost.service';
 import {
   CategoryPostRequest,
@@ -21,6 +28,17 @@ export class CategoryPostController {
     @Body() request: CategoryPostRequest,
   ): Promise<WebResponse<CategoryPostResponse>> {
     const response = await this.categoryPostService.createCategoryPost(request);
+
+    return {
+      data: response,
+    };
+  }
+
+  // API to get all category posts
+  @Get()
+  @HttpCode(200)
+  async getAllCategoryPost(): Promise<WebResponse<CategoryPostResponse[]>> {
+    const response = await this.categoryPostService.getAllCategoryPost();
 
     return {
       data: response,

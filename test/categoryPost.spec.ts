@@ -28,8 +28,8 @@ describe('UserController', () => {
 
   describe('POST /api/category-posts', () => {
     beforeEach(async () => {
-      await testService.deleteCategoryProduct();
-      await testService.createCategoryProduct();
+      await testService.deleteCategoryPost();
+      await testService.createCategoryPost();
 
       // Perform login and get the auth token
       const loginAdminResponse = await request(app.getHttpServer())
@@ -85,6 +85,24 @@ describe('UserController', () => {
         .send({
           name: 'test',
         });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('GET /api/category-posts', () => {
+    beforeEach(async () => {
+      await testService.deleteCategoryPost();
+      await testService.createCategoryPost();
+    });
+
+    it('should be able to get all category post', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-posts',
+      );
 
       logger.info(response.body);
 
