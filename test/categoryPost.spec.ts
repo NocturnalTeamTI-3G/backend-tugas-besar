@@ -13,6 +13,7 @@ describe('UserController', () => {
   let testService: TestService;
   let authToken: string;
   let authTokenMember: string;
+  let category_id: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -102,6 +103,37 @@ describe('UserController', () => {
     it('should be able to get all category post', async () => {
       const response = await request(app.getHttpServer()).get(
         '/api/category-posts',
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('GET /api/category-posts/:categoryPostId', () => {
+    beforeEach(async () => {
+      await testService.deleteCategoryPost();
+      await testService.createCategoryPost();
+
+      category_id = await testService.getCategoryPostId();
+    });
+
+    it('should be rejected if category not found', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-posts/' + 999999,
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to get category post by id', async () => {
+      const response = await request(app.getHttpServer()).get(
+        '/api/category-posts/' + category_id,
       );
 
       logger.info(response.body);

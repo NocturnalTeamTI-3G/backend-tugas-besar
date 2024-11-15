@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
@@ -56,5 +56,26 @@ export class CategoryPostService {
         name: categoryPost.name,
       };
     });
+  }
+
+  // Logic to get category post by id
+  async getCategoryPostById(id: number): Promise<CategoryPostResponse> {
+    this.logger.info('CategoryPostService.getCategoryPostById');
+
+    // Get category post by id
+    const categoryPost = await this.prismaService.categoryPost.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!categoryPost) {
+      throw new HttpException('Category post not found', 404);
+    }
+
+    return {
+      id: categoryPost.id,
+      name: categoryPost.name,
+    };
   }
 }

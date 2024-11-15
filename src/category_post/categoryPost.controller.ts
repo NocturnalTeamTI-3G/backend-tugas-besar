@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
+  ParseIntPipe,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -39,6 +41,19 @@ export class CategoryPostController {
   @HttpCode(200)
   async getAllCategoryPost(): Promise<WebResponse<CategoryPostResponse[]>> {
     const response = await this.categoryPostService.getAllCategoryPost();
+
+    return {
+      data: response,
+    };
+  }
+
+  // API to get a category post by id
+  @Get('/:categoryPostId')
+  @HttpCode(200)
+  async getCategoryPostById(
+    @Param('categoryPostId', ParseIntPipe) id: number,
+  ): Promise<WebResponse<CategoryPostResponse>> {
+    const response = await this.categoryPostService.getCategoryPostById(id);
 
     return {
       data: response,
