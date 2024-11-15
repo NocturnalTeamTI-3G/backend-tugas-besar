@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpException,
@@ -134,4 +135,15 @@ export class PostController {
   }
 
   // API to delete post
+  @Delete('/:postId')
+  @HttpCode(200)
+  async deletePost(
+    @Param('postId', ParseIntPipe) postId: number,
+  ): Promise<WebResponse<boolean>> {
+    await this.postService.deletePost(postId);
+
+    return {
+      data: true,
+    };
+  }
 }

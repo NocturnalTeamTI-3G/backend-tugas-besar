@@ -226,4 +226,44 @@ export class PostService {
       updated_at: updatedPost.updated_at,
     };
   }
+
+  // Logic to delete post
+  async deletePost(postId: number): Promise<PostResponse> {
+    this.logger.info('PostService.deletePost');
+
+    const post = await this.prismaService.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) {
+      throw new HttpException('Post not found', 404);
+    }
+
+    if (fs.existsSync(`./src/post/image/${post.post_img}`)) {
+      const filePath = `./src/post/image/${post.post_img}`;
+      fs.unlinkSync(filePath);
+    }
+
+    // Delete post
+    await this.prismaService.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+
+    return {
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      category_id: post.category_id,
+      user_id: post.user_id,
+      post_img: post.post_img,
+      views: post.views,
+      likes: post.likes,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+    };
+  }
 }
