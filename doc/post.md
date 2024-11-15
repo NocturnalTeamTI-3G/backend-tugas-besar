@@ -12,7 +12,8 @@ Request Body:
         "title": "example of title",
         "user_id": 1,
         "category_id": 1,
-        "content" : "example of content"
+        "content" : "example of content",
+        "post_img": "file.jpg"
     }
 ```
 
@@ -25,6 +26,7 @@ Response Body (Success):
         "content" : "example of content",
         "views": 9999,
         "likes": 9999,
+        "post_img": "file.jpg",
         "created_at": "xxxx-xx-xx"
     }
 ```
@@ -49,6 +51,7 @@ Response Body (Success):
             "content" : "example of content",
             "views": 9999,
             "likes": 9999,
+            "post_img": "file.jpg",
             "created_at": "xxxx-xx-xx"
         },
         {
@@ -58,6 +61,7 @@ Response Body (Success):
             "content" : "example of content",
             "views": 9999,
             "likes": 9999,
+            "post_img": "file.jpg",
             "created_at": "xxxx-xx-xx"
         },
     ]
@@ -83,6 +87,7 @@ Response Body (Success):
         "content" : "example of content",
         "views": 9999,
         "likes": 9999,
+        "post_img": "file.jpg",
         "created_at": "xxxx-xx-xx"
     }
     
@@ -104,10 +109,11 @@ Headers:
 Request Body:
 ```json
     {
-        "title": "example of title",
-        "user_id": 1,
-        "category_id": 1,
-        "content" : "example of content"
+        "title": "example of title", // optional
+        "user_id": 1, // optional
+        "category_id": 1, // optional
+        "post_img": "file.jpg", // optional
+        "content" : "example of content" // optional
     }
 ```
 
@@ -120,6 +126,7 @@ Response Body (Success):
         "content" : "example of content",
         "views": 9999,
         "likes": 9999,
+        "post_img": "file.jpg",
         "created_at": "xxxx-xx-xx"
     }
 ```

@@ -12,7 +12,7 @@ export class FaqService {
   async getFaq(): Promise<FaqResponse[]> {
     this.logger.info('FaqService.getFaq: Getting faq data');
 
-    const filePath = path.join(__dirname, './faq.json');
+    const filePath = path.join(__dirname, '..', '..', 'src', 'faq', 'faq.json');
     const data = fs.readFileSync(filePath, 'utf8');
     const faqs = JSON.parse(data);
 
