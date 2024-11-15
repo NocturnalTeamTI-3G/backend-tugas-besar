@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
+  ParseIntPipe,
   Post,
   Query,
   UploadedFile,
@@ -67,6 +69,15 @@ export class PostController {
   }
 
   // API to likes post
+  @Get('/:postId/likes')
+  @HttpCode(200)
+  async likePost(@Param('postId', ParseIntPipe) postId: number) {
+    const response = await this.postService.likePost(postId);
+
+    return {
+      data: response,
+    };
+  }
 
   // API to get post by id
 

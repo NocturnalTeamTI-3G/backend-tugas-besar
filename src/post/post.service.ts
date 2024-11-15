@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
@@ -81,5 +81,38 @@ export class PostService {
         updated_at: post.updated_at,
       };
     });
+  }
+
+  // Logic to like post
+  async likePost(postId: number): Promise<PostResponse> {
+    this.logger.info('PostService.likePost');
+
+    const post = await this.prismaService.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        likes: {
+          increment: 1,
+        },
+      },
+    });
+
+    if (!post) {
+      throw new HttpException('Post not found', 404);
+    }
+
+    return {
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      category_id: post.category_id,
+      user_id: post.user_id,
+      post_img: post.post_img,
+      views: post.views,
+      likes: post.likes,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+    };
   }
 }
