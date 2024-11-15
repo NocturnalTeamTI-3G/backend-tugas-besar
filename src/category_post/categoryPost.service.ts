@@ -78,4 +78,46 @@ export class CategoryPostService {
       name: categoryPost.name,
     };
   }
+
+  // Logic to update category post by id
+  async updateCategoryPostById(
+    request: CategoryPostRequest,
+    id: number,
+  ): Promise<CategoryPostResponse> {
+    this.logger.info('CategoryPostService.updateCategoryPostById');
+
+    // Check if category post exists
+    const categoryPostExists = await this.prismaService.categoryPost.findUnique(
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+
+    if (!categoryPostExists) {
+      throw new HttpException('Category post not found', 404);
+    }
+
+    // Validate the request
+    const categoryPost = this.validationService.validate(
+      CategoryPostValidation.UPDATE,
+      request,
+    );
+
+    // Update category post by id
+    const updatedCategoryPost = await this.prismaService.categoryPost.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: categoryPost.name,
+      },
+    });
+
+    return {
+      id: updatedCategoryPost.id,
+      name: updatedCategoryPost.name,
+    };
+  }
 }

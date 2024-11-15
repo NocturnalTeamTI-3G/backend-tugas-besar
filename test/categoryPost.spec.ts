@@ -142,4 +142,87 @@ describe('UserController', () => {
       expect(response.body.data).toBeDefined();
     });
   });
+
+  describe('PATCH /api/category-posts/:categoryPostId', () => {
+    beforeEach(async () => {
+      await testService.deleteCategoryPost();
+      await testService.createCategoryPost();
+
+      category_id = await testService.getCategoryPostId();
+
+      // Perform login and get the auth token
+      const loginAdminResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'test@gmail.com',
+          password: 'testtest',
+        });
+
+      const loginMemberResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          email: 'member@gmail.com',
+          password: 'membermember',
+        });
+
+      authToken = loginAdminResponse.body.data.token;
+      authTokenMember = loginMemberResponse.body.data.token;
+    });
+
+    it('should be rejected if not admin', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/category-posts/' + category_id)
+        .set('Authorization', `${authTokenMember}`)
+        .send({
+          name: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and invalid category id', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/category-posts/9999999')
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be rejected if admin and invalid request', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/category-posts/' + category_id)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeDefined();
+    });
+
+    it('should be able to update category product', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/category-posts/' + category_id)
+        .set('Authorization', `${authToken}`)
+        .send({
+          name: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
 });

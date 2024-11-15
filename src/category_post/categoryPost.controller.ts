@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -54,6 +55,23 @@ export class CategoryPostController {
     @Param('categoryPostId', ParseIntPipe) id: number,
   ): Promise<WebResponse<CategoryPostResponse>> {
     const response = await this.categoryPostService.getCategoryPostById(id);
+
+    return {
+      data: response,
+    };
+  }
+
+  @Patch('/:categoryPostId')
+  @HttpCode(200)
+  @Roles('admin')
+  async updateCategoryPost(
+    @Body() request: CategoryPostRequest,
+    @Param('categoryPostId', ParseIntPipe) id: number,
+  ): Promise<WebResponse<CategoryPostResponse>> {
+    const response = await this.categoryPostService.updateCategoryPostById(
+      request,
+      id,
+    );
 
     return {
       data: response,
