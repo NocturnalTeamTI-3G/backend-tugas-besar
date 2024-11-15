@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -103,6 +104,34 @@ export class PostController {
   }
 
   // API to update post
+  @Patch('/:postId')
+  @HttpCode(200)
+  @Roles('admin')
+  @UseInterceptors(
+    FileInterceptor('post_img', {
+      storage: diskStorage({
+        destination: './src/post/image',
+        filename(req, file, callback) {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExtName = extname(file.originalname);
+          const filename = `${file.fieldname}-${uniqueSuffix}${fileExtName}`;
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
+  async updatePost(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Body() request: PostRequest,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    const response = await this.postService.updatePost(postId, request, image);
+
+    return {
+      data: response,
+    };
+  }
 
   // API to delete post
 }

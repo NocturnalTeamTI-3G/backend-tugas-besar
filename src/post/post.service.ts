@@ -6,6 +6,7 @@ import { PostRequest, PostResponse } from '../model/post.model';
 import { ValidationService } from '../common/validation.service';
 import { PostValidation } from './post.validation';
 import { User } from '@prisma/client';
+import * as fs from 'fs';
 
 @Injectable()
 export class PostService {
@@ -32,6 +33,10 @@ export class PostService {
       request,
     );
 
+    if (image) {
+      post.post_img = image.filename;
+    }
+
     // add to database
     const newPost = await this.prismaService.post.create({
       data: {
@@ -39,7 +44,7 @@ export class PostService {
         content: post.content,
         category_id: post.category_id,
         user_id: user.id,
-        post_img: image.filename,
+        post_img: post.post_img,
       },
     });
 
@@ -157,6 +162,68 @@ export class PostService {
       likes: post.likes,
       created_at: post.created_at,
       updated_at: post.updated_at,
+    };
+  }
+
+  // Logic to update post
+  async updatePost(
+    postId: number,
+    request: PostRequest,
+    image: Express.Multer.File,
+  ): Promise<PostResponse> {
+    this.logger.info('PostService.updatePost');
+
+    // change data type category_id
+    request.category_id = parseInt(request.category_id as any, 10);
+
+    const post: PostRequest = this.validationService.validate(
+      PostValidation.UPDATE,
+      request,
+    );
+
+    const checkPost = await this.prismaService.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!checkPost) {
+      throw new HttpException('Post not found', 404);
+    }
+
+    if (image) {
+      if (fs.existsSync(`./src/post/image/${checkPost.post_img}`)) {
+        const filePath = `./src/post/image/${checkPost.post_img}`;
+        fs.unlinkSync(filePath);
+      }
+
+      post.post_img = image.filename;
+    }
+
+    // Update post
+    const updatedPost = await this.prismaService.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        title: post.title,
+        content: post.content,
+        category_id: post.category_id,
+        post_img: post.post_img,
+      },
+    });
+
+    return {
+      id: updatedPost.id,
+      title: updatedPost.title,
+      content: updatedPost.content,
+      category_id: updatedPost.category_id,
+      user_id: updatedPost.user_id,
+      post_img: updatedPost.post_img,
+      views: updatedPost.views,
+      likes: updatedPost.likes,
+      created_at: updatedPost.created_at,
+      updated_at: updatedPost.updated_at,
     };
   }
 }

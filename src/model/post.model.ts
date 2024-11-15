@@ -2,6 +2,7 @@ export class PostRequest {
   title: string;
   content: string;
   category_id: number;
+  post_img: string;
 }
 
 export class PostResponse {
