@@ -56,4 +56,30 @@ export class PostService {
       updated_at: newPost.updated_at,
     };
   }
+
+  // Logic to get all posts
+  async getAllPosts(order: 'asc' | 'desc'): Promise<PostResponse[]> {
+    this.logger.info('PostService.getAllPosts');
+
+    const posts = await this.prismaService.post.findMany({
+      orderBy: {
+        created_at: order,
+      },
+    });
+
+    return posts.map((post) => {
+      return {
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        category_id: post.category_id,
+        user_id: post.user_id,
+        post_img: post.post_img,
+        views: post.views,
+        likes: post.likes,
+        created_at: post.created_at,
+        updated_at: post.updated_at,
+      };
+    });
+  }
 }

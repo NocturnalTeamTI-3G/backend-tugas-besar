@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -23,6 +25,7 @@ import { WebResponse } from '../model/web.model';
 export class PostController {
   constructor(private postService: PostService) {}
 
+  // API to create a new post
   @Post()
   @HttpCode(200)
   @Roles('admin')
@@ -51,4 +54,23 @@ export class PostController {
       data: response,
     };
   }
+
+  // API to get all posts
+  @Get()
+  @HttpCode(200)
+  async getAllPosts(@Query('order') order: 'asc' | 'desc') {
+    const response = await this.postService.getAllPosts(order);
+
+    return {
+      data: response,
+    };
+  }
+
+  // API to likes post
+
+  // API to get post by id
+
+  // API to update post
+
+  // API to delete post
 }

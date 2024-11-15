@@ -39,7 +39,7 @@ Response Body (Failed):
 ```
 
 ## Get All Post
-Endpoint: GET /api/posts
+Endpoint: GET /api/posts?order=asc|desc
 
 Response Body (Success):
 ```json
