@@ -5,6 +5,7 @@ import { Logger } from 'winston';
 import { PrismaService } from '../common/prisma.service';
 import { ProductRequest, ProductResponse } from '../model/product.model';
 import { ProductValidation } from './product.validation';
+import * as fs from 'fs';
 
 @Injectable()
 export class ProductService {
@@ -15,7 +16,10 @@ export class ProductService {
   ) {}
 
   // Logic create product
-  async createProduct(request: ProductRequest): Promise<ProductResponse> {
+  async createProduct(
+    request: ProductRequest,
+    file: Express.Multer.File,
+  ): Promise<ProductResponse> {
     this.logger.info(`ProductService.createProduct: ${request}`);
 
     // Validate request
@@ -23,6 +27,10 @@ export class ProductService {
       ProductValidation.CREATE,
       request,
     );
+
+    if (file) {
+      product.product_img = file.filename;
+    }
 
     // Create product
     const createdProduct = await this.prismaService.product.create({
@@ -100,6 +108,7 @@ export class ProductService {
   async updateProductById(
     productId: number,
     request: ProductRequest,
+    file: Express.Multer.File,
   ): Promise<ProductResponse> {
     this.logger.info(
       `ProductService.updateProductById: ${productId}, ${request}`,
@@ -121,6 +130,17 @@ export class ProductService {
       ProductValidation.UPDATE,
       request,
     );
+
+    if (file) {
+      if (
+        existingProduct.product_img &&
+        fs.existsSync(`./src/product/image/${existingProduct.product_img}`)
+      ) {
+        fs.unlinkSync(`./src/product/image/${existingProduct.product_img}`);
+      }
+
+      product.product_img = file.filename;
+    }
 
     // Update product
     const updatedProduct = await this.prismaService.product.update({
@@ -154,6 +174,13 @@ export class ProductService {
 
     if (!existingProduct) {
       throw new HttpException('Product not found', 404);
+    }
+
+    if (
+      existingProduct.product_img &&
+      fs.existsSync(`./src/product/image/${existingProduct.product_img}`)
+    ) {
+      fs.unlinkSync(`./src/product/image/${existingProduct.product_img}`);
     }
 
     // Delete product
