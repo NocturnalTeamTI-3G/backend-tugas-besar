@@ -84,6 +84,14 @@ model CategoryProduct {
   @@map("category_products")
 }
 
+model CategoryPost {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  // Table name
+  @@map("category_posts")
+}
+
 model disease {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
