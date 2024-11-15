@@ -120,4 +120,31 @@ export class CategoryPostService {
       name: updatedCategoryPost.name,
     };
   }
+
+  // Logic to delete category post by id
+  async deleteCategoryPostById(id: number): Promise<boolean> {
+    this.logger.info('CategoryPostService.deleteCategoryPostById');
+
+    // Check if category post exists
+    const categoryPostExists = await this.prismaService.categoryPost.findUnique(
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+
+    if (!categoryPostExists) {
+      throw new HttpException('Category post not found', 404);
+    }
+
+    // Delete category post by id
+    await this.prismaService.categoryPost.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return true;
+  }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -76,5 +77,16 @@ export class CategoryPostController {
     return {
       data: response,
     };
+  }
+
+  @Delete('/:categoryPostId')
+  @HttpCode(200)
+  @Roles('admin')
+  async deleteCategoryPost(
+    @Param('categoryPostId', ParseIntPipe) id: number,
+  ): Promise<WebResponse<boolean>> {
+    await this.categoryPostService.deleteCategoryPostById(id);
+
+    return { data: true };
   }
 }
