@@ -8,6 +8,7 @@ import { HistoryScanModule } from './history_scan/historyScan.module';
 import { UploadModule } from './upload/upload.module';
 import { CategoryProductModule } from './category_product/categoryProduct.module';
 import { FaqModule } from './faq/faq.module';
+import { CategoryPostModule } from './category_post/categoryPost.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { FaqModule } from './faq/faq.module';
     HistoryScanModule,
     UploadModule,
     CategoryProductModule,
+    CategoryPostModule,
     FaqModule,
   ],
   controllers: [],
