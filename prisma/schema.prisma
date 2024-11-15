@@ -88,8 +88,8 @@ model CategoryProduct {
 }
 
 model CategoryPost {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(50)
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -101,14 +101,16 @@ model CategoryPost {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  user_id    Int
+  id          Int      @id @default(autoincrement())
+  user_id     Int
   category_id Int
-  title      String   @db.VarChar(255)
-  content    String   @db.Text
-  post_img   String   @db.Text
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  title       String   @db.VarChar(255)
+  content     String   @db.Text
+  post_img    String   @db.Text
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   // User Post Relation
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -136,13 +138,13 @@ model disease {
 }
 
 model historyScan {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  disease_id Int
+  id                 Int      @id @default(autoincrement())
+  user_id            Int
+  disease_id         Int
   categoryProduct_id Int
-  face_img   String   @db.Text
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  face_img           String   @db.Text
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 
   // User History Relation
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
