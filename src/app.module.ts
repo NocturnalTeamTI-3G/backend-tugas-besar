@@ -9,6 +9,7 @@ import { UploadModule } from './upload/upload.module';
 import { CategoryProductModule } from './category_product/categoryProduct.module';
 import { FaqModule } from './faq/faq.module';
 import { CategoryPostModule } from './category_post/categoryPost.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CategoryPostModule } from './category_post/categoryPost.module';
     UploadModule,
     CategoryProductModule,
     CategoryPostModule,
+    PostModule,
     FaqModule,
   ],
   controllers: [],
