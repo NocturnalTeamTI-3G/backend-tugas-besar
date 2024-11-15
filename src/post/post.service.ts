@@ -50,6 +50,8 @@ export class PostService {
       category_id: newPost.category_id,
       user_id: newPost.user_id,
       post_img: newPost.post_img,
+      views: newPost.views,
+      likes: newPost.likes,
       created_at: newPost.created_at,
       updated_at: newPost.updated_at,
     };
