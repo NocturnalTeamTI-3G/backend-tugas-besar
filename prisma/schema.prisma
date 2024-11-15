@@ -87,6 +87,8 @@ model CategoryProduct {
 model CategoryPost {
   id Int @id @default(autoincrement())
   name String @db.VarChar(50)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // Table name
   @@map("category_posts")

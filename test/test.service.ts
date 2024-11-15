@@ -91,6 +91,32 @@ export class TestService {
     return categoryProduct.id;
   }
 
+  async createCategoryPost() {
+    await this.prismaService.categoryPost.create({
+      data: {
+        name: 'test',
+      },
+    });
+  }
+
+  async deleteCategoryPost() {
+    await this.prismaService.categoryPost.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
+
+  async getCategoryPostId(): Promise<number> {
+    const categoryPost = await this.prismaService.categoryPost.findFirst({
+      where: {
+        name: 'test',
+      },
+    });
+
+    return categoryPost.id;
+  }
+
   async createDisease() {
     await this.prismaService.disease.create({
       data: {
