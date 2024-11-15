@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -80,6 +82,25 @@ export class PostController {
   }
 
   // API to get post by id
+  @Get('/:postId')
+  @HttpCode(200)
+  async getPostById(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Query('post_clicked') postClicked: boolean,
+  ) {
+    if (postClicked === undefined) {
+      throw new HttpException(
+        'Query parameter "post_clicked" is required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const response = await this.postService.getPostById(postId, postClicked);
+
+    return {
+      data: response,
+    };
+  }
 
   // API to update post
 

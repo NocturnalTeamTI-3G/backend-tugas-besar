@@ -115,4 +115,48 @@ export class PostService {
       updated_at: post.updated_at,
     };
   }
+
+  // Logic to get post by id
+  async getPostById(
+    postId: number,
+    post_clicked: boolean,
+  ): Promise<PostResponse> {
+    this.logger.info('PostService.getPostById');
+
+    const post = await this.prismaService.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) {
+      throw new HttpException('Post not found', 404);
+    }
+
+    if (post_clicked) {
+      await this.prismaService.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          views: {
+            increment: 1,
+          },
+        },
+      });
+    }
+
+    return {
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      category_id: post.category_id,
+      user_id: post.user_id,
+      post_img: post.post_img,
+      views: post.views,
+      likes: post.likes,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+    };
+  }
 }
