@@ -30,4 +30,4 @@ Untuk dokumentasi API Specification bisa diliat di link berikut inih:
 - [CategoryPost API Spec](./doc/categoryPost.md) (done)
 - [FAQ API Spec](./doc/faq.md) (done)
 - [GET Image API Spec](./doc/image.md) (done)
-- [Post API Spec](./doc/post.md) (In Progress)
+- [Post API Spec](./doc/post.md) (done)

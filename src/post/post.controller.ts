@@ -137,6 +137,7 @@ export class PostController {
   // API to delete post
   @Delete('/:postId')
   @HttpCode(200)
+  @Roles('admin')
   async deletePost(
     @Param('postId', ParseIntPipe) postId: number,
   ): Promise<WebResponse<boolean>> {

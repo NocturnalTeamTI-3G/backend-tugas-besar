@@ -76,7 +76,33 @@ Response Body (Failed):
 ```
 
 ## Search Post by Id
+
 Endpoint: GET /api/posts/:postId?post_clicked=(true/false)
+
+Response Body (Success):
+```json
+    {
+        "title": "example of title",
+        "user_id": 1,
+        "category_id": 1,
+        "content" : "example of content",
+        "views": 9999,
+        "likes": 9999,
+        "post_img": "file.jpg",
+        "created_at": "xxxx-xx-xx"
+    }
+    
+```
+
+Response Body (Failed):
+```json
+    {
+        "errors": "post not found"
+    }
+```
+
+## Likes Post
+Endpoint: GET /api/posts/:postId/likes
 
 Response Body (Success):
 ```json
