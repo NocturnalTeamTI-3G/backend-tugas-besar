@@ -89,19 +89,34 @@ export class PostService {
   }
 
   // Logic to like post
-  async likePost(postId: number): Promise<PostResponse> {
+  async likePost(postId: number, like: true | false): Promise<PostResponse> {
     this.logger.info('PostService.likePost');
 
-    const post = await this.prismaService.post.update({
-      where: {
-        id: postId,
-      },
-      data: {
-        likes: {
-          increment: 1,
+    let post: any;
+
+    if (like == true) {
+      post = await this.prismaService.post.update({
+        where: {
+          id: postId,
         },
-      },
-    });
+        data: {
+          likes: {
+            increment: 1,
+          },
+        },
+      });
+    } else {
+      post = await this.prismaService.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          likes: {
+            decrement: 1,
+          },
+        },
+      });
+    }
 
     if (!post) {
       throw new HttpException('Post not found', 404);

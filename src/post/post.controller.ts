@@ -75,8 +75,20 @@ export class PostController {
   // API to likes post
   @Get('/:postId/likes')
   @HttpCode(200)
-  async likePost(@Param('postId', ParseIntPipe) postId: number) {
-    const response = await this.postService.likePost(postId);
+  async likePost(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Query('like') like: boolean,
+  ) {
+    if (like === undefined) {
+      throw new HttpException(
+        'Query parameter "like" is required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    console.log(like);
+
+    const response = await this.postService.likePost(postId, like);
 
     return {
       data: response,

@@ -102,7 +102,7 @@ Response Body (Failed):
 ```
 
 ## Likes Post
-Endpoint: GET /api/posts/:postId/likes
+Endpoint: GET /api/posts/:postId/likes?like=true|false
 
 Response Body (Success):
 ```json
