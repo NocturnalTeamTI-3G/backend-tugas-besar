@@ -9,8 +9,11 @@ export class PostResponse {
   id: number;
   title: string;
   content: string;
-  category_id: number;
-  user_id: number;
+  category_id?: number;
+  user_id?: number;
+  username?: string;
+  profile_img?: string;
+  category_name?: string;
   post_img: string;
   views?: number;
   likes?: number;

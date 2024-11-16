@@ -78,7 +78,7 @@ export class PostController {
   async likePost(
     @Param('postId', ParseIntPipe) postId: number,
     @Query('like') like: boolean,
-  ) {
+  ): Promise<WebResponse<boolean>> {
     if (like === undefined) {
       throw new HttpException(
         'Query parameter "like" is required',
@@ -88,10 +88,10 @@ export class PostController {
 
     console.log(like);
 
-    const response = await this.postService.likePost(postId, like);
+    await this.postService.likePost(postId, like);
 
     return {
-      data: response,
+      data: true,
     };
   }
 

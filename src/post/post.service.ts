@@ -70,6 +70,10 @@ export class PostService {
       orderBy: {
         created_at: order,
       },
+      include: {
+        category: true,
+        user: true,
+      },
     });
 
     return posts.map((post) => {
@@ -77,8 +81,9 @@ export class PostService {
         id: post.id,
         title: post.title,
         content: post.content,
-        category_id: post.category_id,
-        user_id: post.user_id,
+        category_name: post.category.name,
+        username: post.user.username,
+        profile_img: post.user.profile_img,
         post_img: post.post_img,
         views: post.views,
         likes: post.likes,
@@ -147,13 +152,17 @@ export class PostService {
       where: {
         id: postId,
       },
+      include: {
+        user: true,
+        category: true,
+      },
     });
 
     if (!post) {
       throw new HttpException('Post not found', 404);
     }
 
-    if (post_clicked) {
+    if (post_clicked == true) {
       await this.prismaService.post.update({
         where: {
           id: postId,
@@ -170,8 +179,9 @@ export class PostService {
       id: post.id,
       title: post.title,
       content: post.content,
-      category_id: post.category_id,
-      user_id: post.user_id,
+      category_name: post.category.name,
+      username: post.user.username,
+      profile_img: post.user.profile_img,
       post_img: post.post_img,
       views: post.views,
       likes: post.likes,
