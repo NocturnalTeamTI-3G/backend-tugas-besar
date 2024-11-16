@@ -77,7 +77,7 @@ export class PostController {
   @HttpCode(200)
   async likePost(
     @Param('postId', ParseIntPipe) postId: number,
-    @Query('like') like: boolean,
+    @Query('like') like: string,
   ): Promise<WebResponse<boolean>> {
     if (like === undefined) {
       throw new HttpException(
@@ -85,8 +85,6 @@ export class PostController {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    console.log(like);
 
     await this.postService.likePost(postId, like);
 

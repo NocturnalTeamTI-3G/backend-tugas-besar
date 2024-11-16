@@ -94,12 +94,12 @@ export class PostService {
   }
 
   // Logic to like post
-  async likePost(postId: number, like: true | false): Promise<PostResponse> {
+  async likePost(postId: number, like: string): Promise<PostResponse> {
     this.logger.info('PostService.likePost');
 
     let post: any;
 
-    if (like == true) {
+    if (like == 'true') {
       post = await this.prismaService.post.update({
         where: {
           id: postId,
