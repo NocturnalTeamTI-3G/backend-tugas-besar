@@ -49,6 +49,9 @@ model User {
   // Post User Relation
   posts Post[]
 
+  // Detail Post User Relation
+  detailPost DetailPost[]
+
   // Table name
   @@map("users")
 }
@@ -118,8 +121,30 @@ model Post {
   // Category Post Relation
   category CategoryPost @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
+  // Detail Post Relation
+  detailPost DetailPost[]
+
   // Table name
   @@map("posts")
+}
+
+model DetailPost {
+  id Int @id @default(autoincrement())
+  user_id Int
+  post_id Int
+  isLiked Boolean @default(false)
+  isViewed Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // User Detail Post Relation
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Post Detail Post Relation
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  // Table name
+  @@map("detail_posts")
 }
 
 model disease {

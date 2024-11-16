@@ -94,7 +94,11 @@ export class PostService {
   }
 
   // Logic to like post
-  async likePost(postId: number, like: string): Promise<PostResponse> {
+  async likePost(
+    user: User,
+    postId: number,
+    like: string,
+  ): Promise<PostResponse> {
     this.logger.info('PostService.likePost');
 
     let post: any;
@@ -110,6 +114,18 @@ export class PostService {
           },
         },
       });
+
+      await this.prismaService.detailPost.updateMany({
+        where: {
+          AND: {
+            post_id: postId,
+            user_id: user.id,
+          },
+        },
+        data: {
+          isLiked: true,
+        },
+      });
     } else {
       post = await this.prismaService.post.update({
         where: {
@@ -121,7 +137,32 @@ export class PostService {
           },
         },
       });
+
+      await this.prismaService.detailPost.updateMany({
+        where: {
+          AND: [
+            {
+              post_id: postId,
+              user_id: user.id,
+            },
+          ],
+        },
+        data: {
+          isLiked: false,
+        },
+      });
     }
+
+    const checkDetailPost = await this.prismaService.detailPost.findFirst({
+      where: {
+        AND: [
+          {
+            post_id: postId,
+            user_id: user.id,
+          },
+        ],
+      },
+    });
 
     if (!post) {
       throw new HttpException('Post not found', 404);
@@ -136,6 +177,7 @@ export class PostService {
       post_img: post.post_img,
       views: post.views,
       likes: post.likes,
+      isLiked: checkDetailPost.isLiked,
       created_at: post.created_at,
       updated_at: post.updated_at,
     };
@@ -143,12 +185,14 @@ export class PostService {
 
   // Logic to get post by id
   async getPostById(
+    user: User,
     postId: number,
-    post_clicked: boolean,
+    post_clicked: string,
   ): Promise<PostResponse> {
     this.logger.info('PostService.getPostById');
 
-    const post = await this.prismaService.post.findUnique({
+    // Ditambah relasi ke table likes
+    let post = await this.prismaService.post.findUnique({
       where: {
         id: postId,
       },
@@ -162,18 +206,68 @@ export class PostService {
       throw new HttpException('Post not found', 404);
     }
 
-    if (post_clicked == true) {
-      await this.prismaService.post.update({
+    if (post_clicked == 'true') {
+      let checkViewedPost = await this.prismaService.detailPost.findFirst({
         where: {
-          id: postId,
-        },
-        data: {
-          views: {
-            increment: 1,
-          },
+          AND: [
+            {
+              post_id: postId,
+              user_id: user.id,
+            },
+          ],
         },
       });
+
+      if (!checkViewedPost) {
+        checkViewedPost = await this.prismaService.detailPost.create({
+          data: {
+            post_id: postId,
+            user_id: user.id,
+          },
+        });
+      }
+
+      if (!checkViewedPost.isViewed) {
+        await this.prismaService.post.update({
+          where: {
+            id: postId,
+          },
+          data: {
+            views: {
+              increment: 1,
+            },
+          },
+          include: {
+            category: true,
+            user: true,
+          },
+        });
+
+        await this.prismaService.detailPost.updateMany({
+          where: {
+            AND: [
+              {
+                post_id: postId,
+                user_id: user.id,
+              },
+            ],
+          },
+          data: {
+            isViewed: true,
+          },
+        });
+      }
     }
+
+    post = await this.prismaService.post.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        user: true,
+        category: true,
+      },
+    });
 
     return {
       id: post.id,

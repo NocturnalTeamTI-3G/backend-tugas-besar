@@ -76,9 +76,10 @@ export class PostController {
   @Get('/:postId/likes')
   @HttpCode(200)
   async likePost(
+    @Auth() user: User,
     @Param('postId', ParseIntPipe) postId: number,
     @Query('like') like: string,
-  ): Promise<WebResponse<boolean>> {
+  ): Promise<WebResponse<PostResponse>> {
     if (like === undefined) {
       throw new HttpException(
         'Query parameter "like" is required',
@@ -86,10 +87,10 @@ export class PostController {
       );
     }
 
-    await this.postService.likePost(postId, like);
+    const response = await this.postService.likePost(user, postId, like);
 
     return {
-      data: true,
+      data: response,
     };
   }
 
@@ -97,8 +98,9 @@ export class PostController {
   @Get('/:postId')
   @HttpCode(200)
   async getPostById(
+    @Auth() user: User,
     @Param('postId', ParseIntPipe) postId: number,
-    @Query('post_clicked') postClicked: boolean,
+    @Query('post_clicked') postClicked: string,
   ) {
     if (postClicked === undefined) {
       throw new HttpException(
@@ -107,7 +109,11 @@ export class PostController {
       );
     }
 
-    const response = await this.postService.getPostById(postId, postClicked);
+    const response = await this.postService.getPostById(
+      user,
+      postId,
+      postClicked,
+    );
 
     return {
       data: response,

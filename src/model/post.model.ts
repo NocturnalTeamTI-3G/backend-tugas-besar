@@ -17,6 +17,7 @@ export class PostResponse {
   post_img: string;
   views?: number;
   likes?: number;
+  isLiked?: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
