@@ -4,11 +4,7 @@ import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
 import { Logger } from 'winston';
 import { User } from '@prisma/client';
-import {
-  HistoryScanRequest,
-  HistoryScanResponse,
-} from '../model/historyScan.model';
-import { HistoryScanValidation } from './historyScan.validation';
+import { HistoryScanResponse } from '../model/historyScan.model';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
 import { lastValueFrom } from 'rxjs';
@@ -28,17 +24,9 @@ export class HistoryScanService {
   // Logic to create a new history
   async createHistoryScan(
     user: User,
-    request: HistoryScanRequest,
     file_img: Express.Multer.File,
   ): Promise<HistoryScanResponse> {
     this.logger.info('HistoryScanService.createHistoryScan');
-
-    // Convert string values to numbers
-    request.diseaseId = parseInt(request.diseaseId as any, 10);
-    request.categoryProductId = parseInt(request.categoryProductId as any, 10);
-
-    const historyScanRequest: HistoryScanRequest =
-      this.validationService.validate(HistoryScanValidation.CREATE, request);
 
     // Get disease from api python
     const formData = new FormData();
@@ -59,12 +47,23 @@ export class HistoryScanService {
       where: { name: response.data.predict },
     });
 
+    // Find category product by name from response api python
+    const categoryProduct = await this.prismaService.categoryProduct.findFirst({
+      where: {
+        name: response.data.predict,
+      },
+    });
+
+    if (!disease || !categoryProduct) {
+      throw new HttpException('Disease or category product not found', 404);
+    }
+
     const historyScan = await this.prismaService.historyScan.create({
       data: {
         user: { connect: { id: user.id } },
         disease: { connect: { id: disease.id } },
         category_products: {
-          connect: { id: historyScanRequest.categoryProductId },
+          connect: { id: categoryProduct.id },
         },
         face_img: file_img.filename,
       },
@@ -76,7 +75,7 @@ export class HistoryScanService {
 
     // get all products from id category
     const products = await this.prismaService.product.findMany({
-      where: { category_id: historyScanRequest.categoryProductId },
+      where: { category_id: categoryProduct.id },
     });
 
     return {
@@ -100,6 +99,7 @@ export class HistoryScanService {
 
   // Logic to get all history
   async getAllHistories(user: User): Promise<HistoryScanResponse[]> {
+    console.log(user);
     this.logger.info('HistoryScanService.getHistories');
     const histories = await this.prismaService.historyScan.findMany({
       where: { user_id: user.id },

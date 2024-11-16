@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
@@ -13,10 +12,7 @@ import {
 } from '@nestjs/common';
 import { HistoryScanService } from './historyScan.service';
 import { Auth } from '../common/auth.decorator';
-import {
-  HistoryScanRequest,
-  HistoryScanResponse,
-} from '../model/historyScan.model';
+import { HistoryScanResponse } from '../model/historyScan.model';
 import { User } from '@prisma/client';
 import { WebResponse } from '../model/web.model';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -50,11 +46,9 @@ export class HistoryScanController {
   async createHistoryScan(
     @Auth() user: User,
     @UploadedFile() face_img: Express.Multer.File,
-    @Body() request: HistoryScanRequest,
   ) {
     const historyScan = await this.historyScanService.createHistoryScan(
       user,
-      request,
       face_img,
     );
 

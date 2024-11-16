@@ -12,8 +12,6 @@ Request Body:
 
 ```json
 {
-  "diseaseId": 1,
-  "productId": 1,
   "face_img": "*.jpg",
 }
 ```
@@ -29,7 +27,11 @@ Response Body (Success):
         "description_disease": disease.description,
         "face_img": "*.jpg",
         "solution_acne": disease.solution,
-        "product": product.name,
+        "product": [
+          {
+            "name": ....
+          }
+        ],
         "description_product": product.description
     }
 }
@@ -66,7 +68,7 @@ Response Body (Success):
         }
     ]
 }
-```
+```e
 
 Response Body (Failed):
 
