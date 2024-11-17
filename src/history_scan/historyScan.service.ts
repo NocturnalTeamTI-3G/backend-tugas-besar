@@ -91,6 +91,7 @@ export class HistoryScanService {
         nutrition: product.nutrition,
         product_img: product.product_img,
         link_product: product.link_product,
+        category_name: historyScan.category_products.name,
       })),
       face_img: historyScan.face_img,
       created_at: historyScan.created_at,
@@ -103,6 +104,9 @@ export class HistoryScanService {
     this.logger.info('HistoryScanService.getHistories');
     const histories = await this.prismaService.historyScan.findMany({
       where: { user_id: user.id },
+      orderBy: {
+        updated_at: 'desc',
+      },
       include: {
         disease: true,
         category_products: {
@@ -132,6 +136,7 @@ export class HistoryScanService {
         nutrition: product.nutrition,
         product_img: product.product_img,
         link_product: product.link_product,
+        category_name: history.category_products.name,
       })),
       face_img: history.face_img,
       created_at: history.created_at,
@@ -171,6 +176,7 @@ export class HistoryScanService {
         nutrition: product.nutrition,
         product_img: product.product_img,
         link_product: product.link_product,
+        category_name: history.category_products.name,
       })),
       face_img: history.face_img,
       created_at: history.created_at,
