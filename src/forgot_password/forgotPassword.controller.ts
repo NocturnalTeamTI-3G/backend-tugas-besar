@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ForgotPasswordService } from './forgotPassword.service';
 import { WebResponse } from '../model/web.model';
 import {
@@ -46,6 +54,13 @@ export class ForgotPasswordController {
     @Body() request: ForgotPasswordUpdate,
     @Query('email') email: string,
   ) {
+    if (email === undefined) {
+      throw new HttpException(
+        'Query parameter "email" is required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const response = await this.forgotPasswordService.resetPassword(
       request,
       email,

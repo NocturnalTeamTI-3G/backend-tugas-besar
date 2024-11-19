@@ -121,7 +121,7 @@ export class ForgotPasswordService {
     });
 
     if (!user) {
-      throw new HttpException('Invalid or expired token', 400);
+      throw new HttpException('User Not Found', 404);
     }
 
     // Update user password
