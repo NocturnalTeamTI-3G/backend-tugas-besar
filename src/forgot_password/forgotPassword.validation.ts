@@ -1,11 +1,11 @@
-export class ForgotPasswordRequest {
-  email: string;
-}
+import { z, ZodType } from 'zod';
 
-export class ForgotPasswordUpdate {
-  password: string;
-}
+export class ForgotPasswordValidation {
+  static readonly CREATE: ZodType = z.object({
+    email: z.string().email(),
+  });
 
-export class ForgotPasswordResponse {
-  message: string;
+  static readonly UPDATE: ZodType = z.object({
+    password: z.string().min(8),
+  });
 }
