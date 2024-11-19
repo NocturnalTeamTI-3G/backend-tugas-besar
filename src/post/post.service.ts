@@ -270,15 +270,15 @@ export class PostService {
     });
 
     const likedPost = await this.prismaService.detailPost.findFirst({
-       where: {
-         AND: [
-             {
-               post_id: postId,
-               user_id: user.id,
-             },
-          ],
-       },
-     });
+      where: {
+        AND: [
+          {
+            post_id: postId,
+            user_id: user.id,
+          },
+        ],
+      },
+    });
 
     return {
       id: post.id,
