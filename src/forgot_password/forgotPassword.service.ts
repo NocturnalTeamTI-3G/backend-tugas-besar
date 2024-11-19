@@ -8,7 +8,7 @@ import { Logger } from 'winston';
 export class ForgotPasswordService {
   constructor(
     private prismaService: PrismaService,
-    private validatioService: ValidationService,
+    private validationService: ValidationService,
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
   ) {}
 }
