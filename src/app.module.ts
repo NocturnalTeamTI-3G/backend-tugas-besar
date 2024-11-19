@@ -10,6 +10,7 @@ import { CategoryProductModule } from './category_product/categoryProduct.module
 import { FaqModule } from './faq/faq.module';
 import { CategoryPostModule } from './category_post/categoryPost.module';
 import { PostModule } from './post/post.module';
+import { ForgotPasswordModule } from './forgot_password/forgotPassword.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PostModule } from './post/post.module';
     CategoryPostModule,
     PostModule,
     FaqModule,
+    ForgotPasswordModule,
   ],
   controllers: [],
   providers: [],
