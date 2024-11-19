@@ -2,10 +2,15 @@ export class ForgotPasswordRequest {
   email: string;
 }
 
+export class ForgotPasswordCheckToken {
+  token: string;
+}
+
 export class ForgotPasswordUpdate {
   password: string;
 }
 
 export class ForgotPasswordResponse {
-  message: string;
+  email?: string;
+  message?: string;
 }

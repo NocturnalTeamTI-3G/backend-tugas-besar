@@ -29,16 +29,18 @@ model Role {
 
 // User Model
 model User {
-  id          Int      @id @default(autoincrement())
-  role_id     Int
-  username    String   @db.VarChar(100)
-  email       String   @unique @db.VarChar(255)
-  gender      String   @db.VarChar(10)
-  profile_img String?  @db.Text
-  password    String   @db.VarChar(255)
-  token       String?  @db.VarChar(100)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  role_id              Int
+  username             String    @db.VarChar(100)
+  email                String    @unique @db.VarChar(255)
+  gender               String    @db.VarChar(10)
+  profile_img          String?   @db.Text
+  password             String    @db.VarChar(255)
+  resetPasswordToken   String?   @db.VarChar(100)
+  resetPasswordExpires DateTime? @db.DateTime
+  token                String?   @db.VarChar(100)
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
 
   // User Role Relation
   role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
@@ -129,11 +131,11 @@ model Post {
 }
 
 model DetailPost {
-  id Int @id @default(autoincrement())
-  user_id Int
-  post_id Int
-  isLiked Boolean @default(false)
-  isViewed Boolean @default(false)
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  isLiked    Boolean  @default(false)
+  isViewed   Boolean  @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

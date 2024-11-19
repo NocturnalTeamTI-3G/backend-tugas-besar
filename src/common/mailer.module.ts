@@ -22,7 +22,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           from: '"No Reply" <skinassistapp@gmail.com>',
         },
         template: {
-          dir: join(__dirname, 'templates'),
+          dir: join(
+            __dirname,
+            '..',
+            '..',
+            'src',
+            'forgot_password',
+            'templates',
+          ),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
