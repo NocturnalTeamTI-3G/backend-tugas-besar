@@ -31,3 +31,4 @@ Untuk dokumentasi API Specification bisa diliat di link berikut inih:
 - [FAQ API Spec](./doc/faq.md) (done)
 - [GET Image API Spec](./doc/image.md) (done)
 - [Post API Spec](./doc/post.md) (done)
+- [Forgot Password API Spec](./doc/forgotPassword.md) (done)
