@@ -6,7 +6,7 @@ export class HistoryScanResponse {
   disease: string;
   description_disease: string;
   solution_disease: string;
-  products: ProductResponse[];
+  products?: ProductResponse[];
   face_img: string;
   created_at: Date;
 }

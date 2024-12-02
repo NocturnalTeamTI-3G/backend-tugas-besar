@@ -183,6 +183,37 @@ export class HistoryScanService {
     };
   }
 
+  // Logic to get history by id and get last history
+  async getHistoryScanByIdAndLastHistory(
+    userId: number,
+  ): Promise<HistoryScanResponse> {
+    this.logger.info('HistoryScanService.getHistoryScanByIdAndLastHistory');
+
+    const lastHistory = await this.prismaService.historyScan.findFirst({
+      where: { user_id: userId },
+      orderBy: {
+        updated_at: 'desc',
+      },
+      include: {
+        disease: true,
+      },
+    });
+
+    if (!lastHistory) {
+      throw new HttpException('Last history not found', 404);
+    }
+
+    return {
+      id: lastHistory.id,
+      userId: lastHistory.user_id,
+      disease: lastHistory.disease.name,
+      description_disease: lastHistory.disease.description,
+      solution_disease: lastHistory.disease.solution,
+      face_img: lastHistory.face_img,
+      created_at: lastHistory.created_at,
+    };
+  }
+
   // Logic to delete history by id
   async deleteHistoryScanById(historyId: number): Promise<boolean> {
     this.logger.info('HistoryScanService.deleteHistoryScanById');

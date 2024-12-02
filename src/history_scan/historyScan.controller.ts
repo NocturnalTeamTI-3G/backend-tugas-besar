@@ -71,6 +71,21 @@ export class HistoryScanController {
     };
   }
 
+  // API to get last history by id
+  @Get('/last')
+  @HttpCode(200)
+  @Roles('member')
+  async getLastHistoryScan(
+    @Auth() user: User,
+  ): Promise<WebResponse<HistoryScanResponse>> {
+    const history =
+      await this.historyScanService.getHistoryScanByIdAndLastHistory(user.id);
+
+    return {
+      data: history,
+    };
+  }
+
   // API to get history by id
   @Get('/:historyId')
   @HttpCode(200)
