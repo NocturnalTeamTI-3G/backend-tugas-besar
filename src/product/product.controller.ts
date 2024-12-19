@@ -48,6 +48,7 @@ export class ProductController {
     @Body() request: ProductRequest,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<WebResponse<ProductResponse>> {
+    request.category_id = Number(request.category_id);
     const newProduct = await this.productService.createProduct(request, file);
 
     return {
@@ -102,6 +103,7 @@ export class ProductController {
     @Body() request: ProductRequest,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<WebResponse<ProductResponse>> {
+    request.category_id = Number(request.category_id);
     const product = await this.productService.updateProductById(
       productId,
       request,

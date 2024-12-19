@@ -20,7 +20,7 @@ export class ProductService {
     request: ProductRequest,
     file: Express.Multer.File,
   ): Promise<ProductResponse> {
-    this.logger.info(`ProductService.createProduct: ${request}`);
+    this.logger.info(`ProductService.createProduct`);
 
     // Validate request
     const product: ProductRequest = this.validationService.validate(
@@ -110,9 +110,7 @@ export class ProductService {
     request: ProductRequest,
     file: Express.Multer.File,
   ): Promise<ProductResponse> {
-    this.logger.info(
-      `ProductService.updateProductById: ${productId}, ${request}`,
-    );
+    this.logger.info(`ProductService.updateProductById: ${productId}`);
 
     // Check product exists
     const existingProduct = await this.prismaService.product.findFirst({
