@@ -6,6 +6,8 @@ import {
   HttpCode,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { WebResponse } from '../model/web.model';
@@ -17,6 +19,9 @@ import {
 } from '../model/user.model';
 import { User } from '@prisma/client';
 import { Auth } from '../common/auth.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('/api/users')
 export class UserController {
@@ -62,11 +67,30 @@ export class UserController {
   // API to update user
   @Patch('/current')
   @HttpCode(200)
+  @UseInterceptors(
+    FileInterceptor('profile_img', {
+      storage: diskStorage({
+        destination: './src/user/image',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExtName = extname(file.originalname);
+          const filename = `${file.fieldname}-${uniqueSuffix}${fileExtName}`;
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
   async updateCurrentUser(
     @Auth() user: User,
+    @UploadedFile() file: Express.Multer.File,
     @Body() request: UpdateUserRequest,
   ): Promise<WebResponse<UserResponse>> {
-    const result = await this.userService.updateCurrentUser(user, request);
+    const result = await this.userService.updateCurrentUser(
+      user,
+      request,
+      file,
+    );
 
     return {
       data: result,

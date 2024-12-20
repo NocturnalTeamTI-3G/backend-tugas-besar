@@ -5,6 +5,7 @@ import { Logger } from 'winston';
 import { PrismaService } from '../common/prisma.service';
 import { ProductRequest, ProductResponse } from '../model/product.model';
 import { ProductValidation } from './product.validation';
+import * as fs from 'fs';
 
 @Injectable()
 export class ProductService {
@@ -15,8 +16,11 @@ export class ProductService {
   ) {}
 
   // Logic create product
-  async createProduct(request: ProductRequest): Promise<ProductResponse> {
-    this.logger.info(`ProductService.createProduct: ${request}`);
+  async createProduct(
+    request: ProductRequest,
+    file: Express.Multer.File,
+  ): Promise<ProductResponse> {
+    this.logger.info(`ProductService.createProduct`);
 
     // Validate request
     const product: ProductRequest = this.validationService.validate(
@@ -24,20 +28,30 @@ export class ProductService {
       request,
     );
 
+    if (file) {
+      product.product_img = file.filename;
+    }
+
     // Create product
     const createdProduct = await this.prismaService.product.create({
       data: {
         name: product.name,
         description: product.description,
+        category_id: product.category_id,
+        nutrition: product.nutrition,
         product_img: product.product_img,
+        link_product: product.link_product,
       },
     });
 
     return {
       id: createdProduct.id,
+      category_id: createdProduct.category_id,
       name: createdProduct.name,
+      nutrition: createdProduct.nutrition,
       description: createdProduct.description,
       product_img: createdProduct.product_img,
+      link_product: createdProduct.link_product,
     };
   }
 
@@ -45,13 +59,20 @@ export class ProductService {
   async getAllProducts(): Promise<ProductResponse[]> {
     this.logger.info('ProductService.getAllProducts');
 
-    const products = await this.prismaService.product.findMany();
+    const products = await this.prismaService.product.findMany({
+      include: {
+        category: true,
+      },
+    });
 
     return products.map((product) => ({
       id: product.id,
       name: product.name,
+      category_name: product.category.name,
+      nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
+      link_product: product.link_product,
     }));
   }
 
@@ -63,6 +84,9 @@ export class ProductService {
       where: {
         id: productId,
       },
+      include: {
+        category: true,
+      },
     });
 
     if (!product) {
@@ -72,8 +96,11 @@ export class ProductService {
     return {
       id: product.id,
       name: product.name,
+      category_name: product.category.name,
+      nutrition: product.nutrition,
       description: product.description,
       product_img: product.product_img,
+      link_product: product.link_product,
     };
   }
 
@@ -81,10 +108,9 @@ export class ProductService {
   async updateProductById(
     productId: number,
     request: ProductRequest,
+    file: Express.Multer.File,
   ): Promise<ProductResponse> {
-    this.logger.info(
-      `ProductService.updateProductById: ${productId}, ${request}`,
-    );
+    this.logger.info(`ProductService.updateProductById: ${productId}`);
 
     // Check product exists
     const existingProduct = await this.prismaService.product.findFirst({
@@ -103,6 +129,17 @@ export class ProductService {
       request,
     );
 
+    if (file) {
+      if (
+        existingProduct.product_img &&
+        fs.existsSync(`./src/product/image/${existingProduct.product_img}`)
+      ) {
+        fs.unlinkSync(`./src/product/image/${existingProduct.product_img}`);
+      }
+
+      product.product_img = file.filename;
+    }
+
     // Update product
     const updatedProduct = await this.prismaService.product.update({
       where: {
@@ -113,9 +150,12 @@ export class ProductService {
 
     return {
       id: updatedProduct.id,
+      category_id: updatedProduct.category_id,
       name: updatedProduct.name,
+      nutrition: updatedProduct.nutrition,
       description: updatedProduct.description,
       product_img: updatedProduct.product_img,
+      link_product: updatedProduct.link_product,
     };
   }
 
@@ -134,6 +174,13 @@ export class ProductService {
       throw new HttpException('Product not found', 404);
     }
 
+    if (
+      existingProduct.product_img &&
+      fs.existsSync(`./src/product/image/${existingProduct.product_img}`)
+    ) {
+      fs.unlinkSync(`./src/product/image/${existingProduct.product_img}`);
+    }
+
     // Delete product
     await this.prismaService.product.delete({
       where: {
@@ -144,8 +191,11 @@ export class ProductService {
     return {
       id: existingProduct.id,
       name: existingProduct.name,
+      category_id: existingProduct.category_id,
+      nutrition: existingProduct.nutrition,
       description: existingProduct.description,
       product_img: existingProduct.product_img,
+      link_product: existingProduct.link_product,
     };
   }
 }

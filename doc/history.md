@@ -12,8 +12,6 @@ Request Body:
 
 ```json
 {
-  "diseaseId": 1,
-  "productId": 1,
   "face_img": "*.jpg",
 }
 ```
@@ -29,7 +27,11 @@ Response Body (Success):
         "description_disease": disease.description,
         "face_img": "*.jpg",
         "solution_acne": disease.solution,
-        "product": product.name,
+        "product": [
+          {
+            "name": ....
+          }
+        ],
         "description_product": product.description
     }
 }
@@ -64,6 +66,40 @@ Response Body (Success):
             "solution_acne": disease.solution,
             "product_solution": product.name
         }
+    ]
+}
+```e
+
+Response Body (Failed):
+
+```json
+{
+  "status": 404,
+  "message": "Unauthorized"
+}
+```
+
+## Get History (done)
+
+Endpoint: GET /api/histories/1
+
+Headers:
+
+- Authorization: token
+
+Response Body (Success):
+
+```json
+{
+    "data": [
+        {
+            "historyId": 1,
+            "disease": disease.name,
+            "description_disease": disease.description,
+            "face_img": "*.jpg",
+            "solution_acne": disease.solution,
+            "product_solution": product.name
+        },
     ]
 }
 ```

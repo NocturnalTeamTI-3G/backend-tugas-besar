@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Apa itu SkinAssist?",
+    "answer": "SkinAssist adalah aplikasi mobile berbasis AI yang menganalisis kondisi kulit Anda, khususnya dalam mendeteksi jerawat, serta memberikan rekomendasi perawatan sesuai kebutuhan kulit."
+  },
+  {
+    "question": "Bagaimana cara menggunakan SkinAssist?",
+    "answer": "Untuk menggunakan SkinAssist, Anda dapat:\n1. Masuk atau daftar akun.\n2. Ambil foto kulit menggunakan kamera atau unggah foto dari galeri.\n3. Aplikasi akan menganalisis foto dan memberikan hasil deteksi jerawat beserta rekomendasi perawatan.\n4. Lacak perkembangan kondisi kulit Anda dari waktu ke waktu."
+  },
+  {
+    "question": "Apakah SkinAssist aman untuk digunakan dan melindungi privasi saya?",
+    "answer": "Ya, kami menjaga keamanan data Anda dengan baik. Foto dan informasi pribadi Anda aman dan tidak akan dibagikan kepada pihak ketiga tanpa persetujuan Anda."
+  },
+  {
+    "question": "Bagaimana cara meningkatkan akurasi deteksi jerawat di SkinAssist?",
+    "answer": "Pastikan untuk mengambil foto dalam pencahayaan yang baik, fokus pada area kulit yang ingin dianalisis, dan gunakan kamera dengan resolusi yang tinggi untuk hasil terbaik."
+  },
+  {
+    "question": "Apa yang harus saya lakukan jika aplikasi tidak berfungsi dengan baik?",
+    "answer": "Jika mengalami masalah, coba periksa koneksi internet, pastikan aplikasi dalam versi terbaru, atau restart aplikasi. Jika masalah tetap terjadi, hubungi dukungan melalui fitur Support di aplikasi."
+  }
+]

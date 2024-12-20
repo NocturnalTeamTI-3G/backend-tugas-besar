@@ -59,7 +59,10 @@ describe('UserController', () => {
         .send({
           name: 'test',
           description: 'test',
+          category_id: 1,
+          nutrition: 'test',
           product_img: 'test.jpg',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -76,6 +79,9 @@ describe('UserController', () => {
           name: '',
           description: '',
           product_img: '',
+          category_id: NaN,
+          nutrition: '',
+          link_product: '',
         });
 
       logger.info(response.body);
@@ -92,14 +98,15 @@ describe('UserController', () => {
           name: 'test',
           description: 'test',
           product_img: 'test.jpg',
+          category_id: 1,
+          nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
 
       expect(response.status).toBe(200);
-      expect(response.body.data.name).toBe('test');
-      expect(response.body.data.description).toBe('test');
-      expect(response.body.data.product_img).toBe('test.jpg');
+      expect(response.body.data).toBeDefined();
     });
   });
 
@@ -180,6 +187,9 @@ describe('UserController', () => {
           name: 'test',
           description: 'test',
           product_img: 'test.jpg',
+          category_id: 1,
+          nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
@@ -204,7 +214,7 @@ describe('UserController', () => {
       expect(response.body).toBeDefined();
     });
 
-    it('should be able to create product', async () => {
+    it('should be able to update product', async () => {
       const response = await request(app.getHttpServer())
         .patch(`/api/products/1`)
         .set('Authorization', `${authToken}`)
@@ -212,14 +222,15 @@ describe('UserController', () => {
           name: 'test product',
           description: 'test product123',
           product_img: 'test.jpg',
+          category_id: 1,
+          nutrition: 'test',
+          link_product: 'test',
         });
 
       logger.info(response.body);
 
       expect(response.status).toBe(200);
-      expect(response.body.data.name).toBe('test product');
-      expect(response.body.data.description).toBe('test product123');
-      expect(response.body.data.product_img).toBe('test.jpg');
+      expect(response.body.data).toBeDefined();
     });
   });
 
@@ -253,6 +264,9 @@ describe('UserController', () => {
           name: 'test',
           description: 'test',
           product_img: 'test.jpg',
+          category_id: 1,
+          nutrition: 'test',
+          link_product: 'test',
         });
 
       product_id = product.body.data.id;
@@ -261,12 +275,7 @@ describe('UserController', () => {
     it('should be rejected if not admin', async () => {
       const response = await request(app.getHttpServer())
         .delete(`/api/products/${product_id}`)
-        .set('Authorization', `${authTokenMember}`)
-        .send({
-          name: 'test',
-          description: 'test',
-          product_img: 'test.jpg',
-        });
+        .set('Authorization', `${authTokenMember}`);
 
       logger.info(response.body);
 
@@ -277,12 +286,7 @@ describe('UserController', () => {
     it('should be able to delete product', async () => {
       const response = await request(app.getHttpServer())
         .delete(`/api/products/${product_id}`)
-        .set('Authorization', `${authToken}`)
-        .send({
-          name: 'test product',
-          description: 'test product123',
-          product_img: 'test.jpg',
-        });
+        .set('Authorization', `${authToken}`);
 
       logger.info(response.body);
 

@@ -48,8 +48,11 @@ export class TestService {
     await this.prismaService.product.create({
       data: {
         name: 'test',
+        category_id: 1,
+        nutrition: 'test',
         description: 'test',
         product_img: 'test.jpg',
+        link_product: 'test',
       },
     });
   }
@@ -60,6 +63,58 @@ export class TestService {
         name: 'test',
       },
     });
+  }
+
+  async createCategoryProduct() {
+    await this.prismaService.categoryProduct.create({
+      data: {
+        name: 'test',
+      },
+    });
+  }
+
+  async deleteCategoryProduct() {
+    await this.prismaService.categoryProduct.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
+
+  async getCategoryProductId(): Promise<number> {
+    const categoryProduct = await this.prismaService.categoryProduct.findFirst({
+      where: {
+        name: 'test',
+      },
+    });
+
+    return categoryProduct.id;
+  }
+
+  async createCategoryPost() {
+    await this.prismaService.categoryPost.create({
+      data: {
+        name: 'test',
+      },
+    });
+  }
+
+  async deleteCategoryPost() {
+    await this.prismaService.categoryPost.deleteMany({
+      where: {
+        name: 'test',
+      },
+    });
+  }
+
+  async getCategoryPostId(): Promise<number> {
+    const categoryPost = await this.prismaService.categoryPost.findFirst({
+      where: {
+        name: 'test',
+      },
+    });
+
+    return categoryPost.id;
   }
 
   async createDisease() {
@@ -94,9 +149,9 @@ export class TestService {
   async createHistoryScan() {
     await this.prismaService.historyScan.create({
       data: {
-        user_id: 328,
+        user_id: 1,
         disease_id: 1,
-        product_id: 1,
+        categoryProduct_id: 1,
         face_img: 'test.jpg',
       },
     });

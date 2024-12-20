@@ -29,16 +29,18 @@ model Role {
 
 // User Model
 model User {
-  id          Int      @id @default(autoincrement())
-  role_id     Int
-  username    String   @db.VarChar(100)
-  email       String   @unique @db.VarChar(255)
-  gender      String   @db.VarChar(10)
-  profile_img String?  @db.Text
-  password    String   @db.VarChar(255)
-  token       String?  @db.VarChar(100)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  role_id              Int
+  username             String    @db.VarChar(100)
+  email                String    @unique @db.VarChar(255)
+  gender               String    @db.VarChar(10)
+  profile_img          String?   @db.Text
+  password             String    @db.VarChar(255)
+  resetPasswordToken   String?   @db.VarChar(100)
+  resetPasswordExpires DateTime? @db.DateTime
+  token                String?   @db.VarChar(100)
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
 
   // User Role Relation
   role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
@@ -46,24 +48,105 @@ model User {
   // History User Relation
   historyScan historyScan[]
 
+  // Post User Relation
+  posts Post[]
+
+  // Detail Post User Relation
+  detailPost DetailPost[]
+
   // Table name
   @@map("users")
 }
 
 // Model Products
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  description String   @db.Text
-  product_img String   @db.Text
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  category_id  Int
+  name         String   @db.VarChar(255)
+  link_product String   @db.Text
+  description  String   @db.Text
+  nutrition    String   @db.Text
+  product_img  String   @db.Text
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  // Product Category Relation
+  category CategoryProduct @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  // Table name
+  @@map("products")
+}
+
+model CategoryProduct {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Product Category Relation
+  products Product[]
 
   // History Product Relation
   historyScan historyScan[]
 
+  @@map("category_products")
+}
+
+model CategoryPost {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Post Category Relation
+  posts Post[]
+
   // Table name
-  @@map("products")
+  @@map("category_posts")
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  category_id Int
+  title       String   @db.Text
+  content     String   @db.Text
+  post_img    String   @db.Text
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // User Post Relation
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Category Post Relation
+  category CategoryPost @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  // Detail Post Relation
+  detailPost DetailPost[]
+
+  // Table name
+  @@map("posts")
+}
+
+model DetailPost {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  isLiked    Boolean  @default(false)
+  isViewed   Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // User Detail Post Relation
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Post Detail Post Relation
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  // Table name
+  @@map("detail_posts")
 }
 
 model disease {
@@ -82,13 +165,13 @@ model disease {
 }
 
 model historyScan {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  disease_id Int
-  product_id Int
-  face_img   String   @db.Text
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id                 Int      @id @default(autoincrement())
+  user_id            Int
+  disease_id         Int
+  categoryProduct_id Int
+  face_img           String   @db.Text
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 
   // User History Relation
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -97,7 +180,7 @@ model historyScan {
   disease disease @relation(fields: [disease_id], references: [id], onDelete: Cascade)
 
   // Product History Relation
-  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  category_products CategoryProduct @relation(fields: [categoryProduct_id], references: [id], onDelete: Cascade)
 
   // Table name
   @@map("history_scans")
